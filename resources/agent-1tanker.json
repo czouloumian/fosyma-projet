@@ -1,0 +1,13 @@
+[
+{ 
+  "agentType":"agentTanker",
+  "agentName": "Tank",
+  "communicationRange": 3,
+  "initialLocation": "free",
+  "backPackCapacityGold": 100,
+  "backPackCapacityDiamond":100, 
+  "detectionRadius": 0,
+  "strengthExpertise": 1,
+  "lockPickingExpertise":1
+  }
+]
