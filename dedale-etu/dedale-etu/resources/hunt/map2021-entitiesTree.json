@@ -1,0 +1,57 @@
+[
+{ 
+  "agentType":"wumpus",
+  "agentName": "Golem1",
+  "communicationRange": 1,
+  "initialLocation": "8",
+  "backPackCapacityGold": -1,
+  "backPackCapacityDiamond":-1, 
+  "detectionRadius": 2,
+  "strengthExpertise": 1,
+  "lockPickingExpertise":1
+  },
+  { 
+  "agentType":"wumpus",
+  "agentName": "Golem2",
+  "communicationRange": 1,
+  "initialLocation": "25",
+  "backPackCapacityGold": -1,
+  "backPackCapacityDiamond":-1, 
+  "detectionRadius": 1,
+  "strengthExpertise": 1,
+  "lockPickingExpertise":1
+  },
+{ 
+  "agentType":"agentExplo",
+  "agentName": "Explo1",
+  "communicationRange": 2,
+  "initialLocation": "290",
+  "backPackCapacityGold": -1,
+  "backPackCapacityDiamond":-1, 
+  "detectionRadius": 0,
+  "strengthExpertise": 1,
+  "lockPickingExpertise":1
+  },
+  { 
+  "agentType":"agentExplo",
+  "agentName": "Explo2",
+  "communicationRange": 2,
+  "initialLocation": "216",
+  "backPackCapacityGold": -1,
+  "backPackCapacityDiamond":-1, 
+  "detectionRadius": 0,
+  "strengthExpertise": 1,
+  "lockPickingExpertise":1
+  },
+  { 
+  "agentType":"agentExplo",
+  "agentName": "Explo3",
+  "communicationRange": 2,
+  "initialLocation": "32",
+  "backPackCapacityGold": -1,
+  "backPackCapacityDiamond":-1, 
+  "detectionRadius": 0,
+  "strengthExpertise": 1,
+  "lockPickingExpertise":1
+  }
+]
