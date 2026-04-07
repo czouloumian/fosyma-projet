@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 import dataStructures.serializableGraph.SerializableSimpleGraph;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
@@ -13,23 +15,29 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 public class ShareMapBehaviourBest extends TickerBehaviour {
 
     private static final long serialVersionUID = -568863390879327961L;
-    private static final int MIN_TICKS_BETWEEN_SENDS = 5;
+    private static final int MIN_TICKS_BETWEEN_SENDS = 3;
 
     private MapRepresentation myMap;
     private List<String> receivers;
 
     // Tick du dernier envoi par agent : { "agent2" -> 3, "agent3" -> 7 }
     private Map<String, Integer> lastSentTick;
+    
+    private Map<String, Integer> pendingAckSentTick = new HashMap<>();
+    private static final int ACK_TIMEOUT = 10;
 
     // Dernière carte envoyée par agent : { "agent2" -> graphe, "agent3" -> graphe }
     private Map<String, SerializableSimpleGraph<String, MapAttribute>> lastSentGraph;
 
     // Compteur de ticks interne
     private int currentTick;
+    
+    private Set<String> pendingAck = new HashSet<>();
 
     public ShareMapBehaviourBest(Agent a, long period, MapRepresentation mymap,
                               List<String> receivers) {
@@ -45,20 +53,33 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
 
     @Override
     protected void onTick() {
-    	 System.out.println("[" + myAgent.getLocalName() + "] onTick receivers = " + receivers);
-    	    
+        System.out.println("[" + myAgent.getLocalName() + "] onTick receivers = " + receivers);
+
+        checkAcknowledgements(); // ← met à jour lastSentTick quand ACK reçu
+
+        // Fin du behaviour si exploration terminée
+        if (!myMap.hasOpenNode()) {
+            System.out.println("[" + myAgent.getLocalName() + "] Exploration terminée, arrêt du ShareMapBehaviour");
+            stop();
+            return;
+        }
+
         currentTick++;
 
-        System.out.println("\n========== [" + myAgent.getLocalName() 
+        System.out.println("\n========== [" + myAgent.getLocalName()
             + "] TICK " + currentTick + " ==========");
 
-        // Afficher l'état des dictionnaires
         printDictionaryState();
 
-        SerializableSimpleGraph<String, MapAttribute> currentGraph =
-            this.myMap.getSerializableGraph();
+        SerializableSimpleGraph<String, MapAttribute> currentGraph = this.myMap.getSerializableGraph();
 
         for (String agentName : receivers) {
+
+            // Ne pas renvoyer si on attend déjà un ACK
+            if (pendingAck.contains(agentName)) {
+                System.out.println("  → " + agentName + " : en attente d'ACK, skip");
+                continue;
+            }
 
             int ticksSinceLastSend = currentTick
                 - lastSentTick.getOrDefault(agentName, -MIN_TICKS_BETWEEN_SENDS);
@@ -72,8 +93,7 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
                 continue;
             }
 
-            SerializableSimpleGraph<String, MapAttribute> previousGraph =
-                lastSentGraph.get(agentName);
+            SerializableSimpleGraph<String, MapAttribute> previousGraph = lastSentGraph.get(agentName);
 
             boolean changed = hasMapChanged(previousGraph, currentGraph);
             System.out.println("     Carte changée ? " + changed
@@ -85,8 +105,37 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
             }
 
             sendMap(agentName, currentGraph);
-            lastSentTick.put(agentName, currentTick);
+            // ← plus de lastSentTick.put ici, on attend l'ACK
             lastSentGraph.put(agentName, currentGraph);
+            pendingAck.add(agentName);
+            pendingAckSentTick.put(agentName, currentTick);
+        }
+    }
+    
+    private void checkAcknowledgements() {
+        MessageTemplate mt = MessageTemplate.and(
+        MessageTemplate.MatchProtocol("SHARE-TOPO-ACK"),
+        MessageTemplate.MatchPerformative(ACLMessage.CONFIRM));
+        
+        ACLMessage ack;
+        while ((ack = myAgent.receive(mt)) != null) {
+            String sender = ack.getSender().getLocalName();
+            pendingAck.remove(sender);
+            lastSentTick.put(sender, currentTick);
+            System.out.println("[" + myAgent.getLocalName() + "] ACK reçu de " + sender);
+        }
+        Set<String> timedOut = new HashSet<>();
+        for (String agent : pendingAck) {
+            int sentTick = pendingAckSentTick.getOrDefault(agent, 0);
+            if (currentTick - sentTick > ACK_TIMEOUT) {
+                timedOut.add(agent);
+                System.out.println("[" + myAgent.getLocalName() + "] ACK timeout pour " + agent + ", on réessaiera");
+            }
+        }
+        for (String agent : timedOut) {
+            pendingAck.remove(agent);
+            pendingAckSentTick.remove(agent);
+            lastSentTick.put(agent, currentTick - MIN_TICKS_BETWEEN_SENDS);
         }
     }
 

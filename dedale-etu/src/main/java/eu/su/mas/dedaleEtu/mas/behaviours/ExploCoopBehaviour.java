@@ -2,6 +2,8 @@ package eu.su.mas.dedaleEtu.mas.behaviours;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import dataStructures.serializableGraph.SerializableSimpleGraph;
 import dataStructures.tuple.Couple;
@@ -77,6 +79,16 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 		if (myPosition!=null){
 			//List of observable from the agent's current position
 			List<Couple<Location,List<Couple<Observation,String>>>> lobs=((AbstractDedaleAgent)this.myAgent).observe();//myPosition
+			
+			Set<String> occupiedNodes = new HashSet<>();
+
+			for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
+			    for (Couple<Observation, String> attr : obs.getRight()) {
+			        if (attr.getLeft() == Observation.AGENTNAME) {
+			            occupiedNodes.add(obs.getLeft().getLocationId());
+			        }
+			    }
+			}
 
 			/**
 			 * Just added here to let you see what the agent is doing, otherwise he will be too quick
@@ -99,7 +111,12 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				//the node may exist, but not necessarily the edge
 				if (myPosition.getLocationId()!=accessibleNode.getLocationId()) {
 					this.myMap.addEdge(myPosition.getLocationId(), accessibleNode.getLocationId());
-					if (nextNodeId==null && isNewNode) nextNodeId=accessibleNode.getLocationId();
+					//if (nextNodeId==null && isNewNode) nextNodeId=accessibleNode.getLocationId();
+					if (nextNodeId==null && isNewNode 
+						    && !occupiedNodes.contains(accessibleNode.getLocationId())) {
+
+						    nextNodeId = accessibleNode.getLocationId();
+					}
 				}
 			}
 
@@ -112,12 +129,41 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				//4) select next move.
 				//4.1 If there exist one open node directly reachable, go for it,
 				//	 otherwise choose one from the openNode list, compute the shortestPath and go for it
-				if (nextNodeId==null){
+				/*if (nextNodeId==null){
 					//no directly accessible openNode
 					//chose one, compute the path and take the first step.
 					nextNodeId=this.myMap.getShortestPathToClosestOpenNode(myPosition.getLocationId()).get(0);//getShortestPath(myPosition,this.openNodes.get(0)).get(0);
 					//System.out.println(this.myAgent.getLocalName()+"-- list= "+this.myMap.getOpenNodes()+"| nextNode: "+nextNode);
-				}else {
+				}*/
+				if (nextNodeId == null) {
+				    List<String> path = this.myMap.getShortestPathToClosestOpenNode(myPosition.getLocationId());
+
+				    if (path != null && !path.isEmpty()) {
+
+				    	String nextStep = path.get(0); 
+
+				        if (!occupiedNodes.contains(nextStep)) {
+				            nextNodeId = nextStep;
+				        }
+				    }
+
+				    if (nextNodeId == null) {
+				        System.out.println("[" + myAgent.getLocalName() + "] fallback voisins");
+
+				        for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
+				            String neighbor = obs.getLeft().getLocationId();
+
+				            // éviter de rester sur place + éviter agents
+				            if (!neighbor.equals(myPosition.getLocationId()) 
+				                && !occupiedNodes.contains(neighbor)) {
+
+				                nextNodeId = neighbor;
+				                break;
+				            }
+				        }
+				    }
+				}
+				else {
 					//System.out.println("nextNode notNUll - "+this.myAgent.getLocalName()+"-- list= "+this.myMap.getOpenNodes()+"\n -- nextNode: "+nextNode);
 				}
 				
@@ -140,9 +186,31 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 						e.printStackTrace();
 					}
 					this.myMap.mergeMap(sgreceived);
+					
+					 ACLMessage ack = new ACLMessage(ACLMessage.CONFIRM);
+					 ack.setProtocol("SHARE-TOPO-ACK");
+					 ack.addReceiver(msgReceived.getSender());
+					 this.myAgent.send(ack);
 				}
 
-				((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(nextNodeId));
+				//((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(nextNodeId));
+				
+				boolean success = ((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(nextNodeId));
+
+				if (!success) {
+				    System.out.println("[" + myAgent.getLocalName() + "] move failed → fallback random");
+
+				    for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
+				        String neighbor = obs.getLeft().getLocationId();
+
+				        if (!neighbor.equals(myPosition.getLocationId()) 
+				            && !occupiedNodes.contains(neighbor)) {
+
+				            ((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(neighbor));
+				            break;
+				        }
+				    }
+				}
 			}
 
 		}

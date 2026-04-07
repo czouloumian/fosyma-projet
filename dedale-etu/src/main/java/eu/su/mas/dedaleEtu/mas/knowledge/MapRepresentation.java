@@ -207,10 +207,15 @@ public class MapRepresentation implements Serializable {
 
 
 	public List<String> getOpenNodes(){
-		return this.g.nodes()
+		/*return this.g.nodes()
 				.filter(x ->x .getAttribute("ui.class")==MapAttribute.open.toString()) 
 				.map(Node::getId)
+				.collect(Collectors.toList());*/
+		return this.g.nodes()
+				.filter(x -> MapAttribute.open.toString().equals(x.getAttribute("ui.class"))) 
+				.map(Node::getId)
 				.collect(Collectors.toList());
+		
 	}
 
 
@@ -352,8 +357,12 @@ public class MapRepresentation implements Serializable {
 			}else{
 				newnode=this.g.getNode(n.getNodeId());
 				//3 check its attribute. If it is below the one received, update it.
-				if (((String) newnode.getAttribute("ui.class"))==MapAttribute.closed.toString() || n.getNodeContent().toString()==MapAttribute.closed.toString()) {
+				/*if (((String) newnode.getAttribute("ui.class"))==MapAttribute.closed.toString() || n.getNodeContent().toString()==MapAttribute.closed.toString()) {
 					newnode.setAttribute("ui.class",MapAttribute.closed.toString());
+				}*/
+				if (MapAttribute.closed.toString().equals(newnode.getAttribute("ui.class"))
+					    || MapAttribute.closed.toString().equals(n.getNodeContent().toString())) {
+					    newnode.setAttribute("ui.class", MapAttribute.closed.toString());
 				}
 			}
 		}
@@ -373,7 +382,7 @@ public class MapRepresentation implements Serializable {
 	 */
 	public boolean hasOpenNode() {
 		return (this.g.nodes()
-				.filter(n -> n.getAttribute("ui.class")==MapAttribute.open.toString())
+				.filter(n -> MapAttribute.open.toString().equals(n.getAttribute("ui.class")))
 				.findAny()).isPresent();
 	}
 
