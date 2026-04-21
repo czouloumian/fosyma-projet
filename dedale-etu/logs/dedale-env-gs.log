@@ -1453,3 +1453,355 @@
  	 detection radius: 0
  	 Expertise: [<LockPicking, 1>, <Strength, 2>]
  	 UserParameters: [Elsa, Tim]
+14:10:50.631 [GK] INFO  - Loading configuration for environment MultiTypesV2
+14:10:50.632 [GK] INFO  - Generator type:MANUAL
+14:10:54.823 [Bob] INFO  - Entity Bob deployed in 6
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Tim]
+14:10:54.829 [Tim] INFO  - Entity Tim deployed in 22
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Bob]
+14:10:54.832 [Elsa] INFO  - Entity Elsa deployed in 41
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Tim, Bob]
+14:13:06.476 [GK] INFO  - Loading configuration for environment MultiTypesV2
+14:13:06.477 [GK] INFO  - Generator type:MANUAL
+14:13:08.332 [Elsa] INFO  - Entity Elsa deployed in 39
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Tim, Bob]
+14:13:08.351 [Bob] INFO  - Entity Bob deployed in 97
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Tim]
+14:13:08.356 [Tim] INFO  - Entity Tim deployed in 122
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Bob]
+14:14:24.308 [GK] INFO  - Loading configuration for environment MultiTypesV2
+14:14:24.309 [GK] INFO  - Generator type:MANUAL
+14:14:26.204 [Bob] INFO  - Entity Bob deployed in 93
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Tim]
+14:14:26.219 [Tim] INFO  - Entity Tim deployed in 38
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Bob]
+14:14:26.227 [Elsa] INFO  - Entity Elsa deployed in 122
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Tim, Bob]
+14:47:41.068 [GK] INFO  - Loading configuration for environment MultiTypesV2
+14:47:41.070 [GK] INFO  - Generator type:MANUAL
+14:47:43.396 [Tim] INFO  - Entity Tim deployed in 8
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Bob]
+14:47:43.407 [Elsa] INFO  - Entity Elsa deployed in M25
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Tim, Bob]
+14:47:43.408 [Bob] INFO  - Entity Bob deployed in 79
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Tim]
+14:51:05.058 [GK] INFO  - Loading configuration for environment MultiTypesV2
+14:51:05.058 [GK] INFO  - Generator type:MANUAL
+14:51:07.016 [Elsa] INFO  - Entity Elsa deployed in 105
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Tim, Bob]
+14:51:07.033 [Bob] INFO  - Entity Bob deployed in 112
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Tim]
+14:51:07.043 [Tim] INFO  - Entity Tim deployed in 36
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Bob]
+14:54:51.928 [GK] INFO  - Loading configuration for environment MultiTypesV2
+14:54:51.929 [GK] INFO  - Generator type:MANUAL
+14:54:53.846 [Tim] INFO  - Entity Tim deployed in 52
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Bob]
+14:54:53.858 [Bob] INFO  - Entity Bob deployed in 39
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Tim]
+14:54:53.869 [Elsa] INFO  - Entity Elsa deployed in 32
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Tim, Bob]
+14:57:35.875 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:57:37.903 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:57:39.919 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:58:34.365 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:58:36.394 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:58:38.407 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:58:40.418 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:58:42.433 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:58:46.469 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:58:50.492 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:58:52.505 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:58:54.526 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:58:56.537 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:04.590 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:06.599 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:08.614 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:09.620 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:10.631 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:11.638 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:12.647 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:14.666 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:16.675 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:18.686 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:19.692 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:20.699 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:22.707 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:25.206 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:27.211 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:29.220 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:31.228 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:33.233 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:35.239 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:37.244 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:39.251 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:41.263 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:43.275 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:45.295 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:47.305 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+14:59:49.321 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+15:11:46.751 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+15:11:48.761 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+15:11:50.772 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+15:11:52.777 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+15:11:54.788 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+15:11:56.798 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+15:11:58.806 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+15:12:00.832 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+15:12:02.839 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+15:17:01.753 [GK] INFO  - Loading configuration for environment MultiTypesV2
+15:17:01.754 [GK] INFO  - Generator type:MANUAL
+15:17:03.658 [Elsa] INFO  - Entity Elsa deployed in M7
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Tim, Bob]
+15:17:03.666 [Tim] INFO  - Entity Tim deployed in 25
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Bob]
+15:17:03.671 [Bob] INFO  - Entity Bob deployed in 45
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Tim]
+15:19:38.488 [GK] INFO  - Loading configuration for environment MultiTypesV2
+15:19:38.490 [GK] INFO  - Generator type:MANUAL
+15:19:40.442 [Elsa] INFO  - Entity Elsa deployed in 104
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Tim, Bob]
+15:19:40.462 [Bob] INFO  - Entity Bob deployed in M16
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Tim]
+15:19:40.471 [Tim] INFO  - Entity Tim deployed in 95
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<Strength, 2>, <LockPicking, 1>]
+ 	 UserParameters: [Elsa, Bob]

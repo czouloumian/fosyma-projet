@@ -20,7 +20,7 @@ import jade.lang.acl.MessageTemplate;
 public class ShareMapBehaviourBest extends TickerBehaviour {
 
     private static final long serialVersionUID = -568863390879327961L;
-    private static final int MIN_TICKS_BETWEEN_SENDS = 3;
+    private static final int MIN_TICKS_BETWEEN_SENDS = 0;
 
     private MapRepresentation myMap;
     private List<String> receivers;
@@ -29,7 +29,7 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
     private Map<String, Integer> lastSentTick;
     
     private Map<String, Integer> pendingAckSentTick = new HashMap<>();
-    private static final int ACK_TIMEOUT = 10;
+    private static final int ACK_TIMEOUT = 3;
 
     // Dernière carte envoyée par agent : { "agent2" -> graphe, "agent3" -> graphe }
     private Map<String, SerializableSimpleGraph<String, MapAttribute>> lastSentGraph;
@@ -38,6 +38,8 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
     private int currentTick;
     
     private Set<String> pendingAck = new HashSet<>();
+    
+    private Map<String, SerializableSimpleGraph<String, MapAttribute>> pendingGraph = new HashMap<>();
 
     public ShareMapBehaviourBest(Agent a, long period, MapRepresentation mymap,
                               List<String> receivers) {
@@ -58,10 +60,28 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
         checkAcknowledgements(); // ← met à jour lastSentTick quand ACK reçu
 
         // Fin du behaviour si exploration terminée
-        if (!myMap.hasOpenNode()) {
+        /*if (!myMap.hasOpenNode()) {
             System.out.println("[" + myAgent.getLocalName() + "] Exploration terminée, arrêt du ShareMapBehaviour");
             stop();
             return;
+        }*/
+        
+        if (!myMap.hasOpenNode()) {
+            // Si plus de nœuds ouverts, les ACK en attente ne bloquent plus l'arrêt
+            if (pendingAck.isEmpty()) {
+                System.out.println("[" + myAgent.getLocalName() + "] Exploration terminée + ACK OK, arrêt");
+                stop();
+                return;
+            }
+            // On attend encore un peu, mais si timeout global → on force l'arrêt
+            boolean allTimedOut = pendingAck.stream().allMatch(agent ->
+                currentTick - pendingAckSentTick.getOrDefault(agent, 0) > ACK_TIMEOUT
+            );
+            if (allTimedOut) {
+                System.out.println("[" + myAgent.getLocalName() + "] Exploration terminée, ACK perdus → arrêt forcé");
+                stop();
+                return;
+            }
         }
 
         currentTick++;
@@ -106,7 +126,7 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
 
             sendMap(agentName, currentGraph);
             // ← plus de lastSentTick.put ici, on attend l'ACK
-            lastSentGraph.put(agentName, currentGraph);
+            pendingGraph.put(agentName, currentGraph);
             pendingAck.add(agentName);
             pendingAckSentTick.put(agentName, currentTick);
         }
@@ -122,6 +142,8 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
             String sender = ack.getSender().getLocalName();
             pendingAck.remove(sender);
             lastSentTick.put(sender, currentTick);
+            lastSentGraph.put(sender, pendingGraph.get(sender)); 
+            pendingGraph.remove(sender);
             System.out.println("[" + myAgent.getLocalName() + "] ACK reçu de " + sender);
         }
         Set<String> timedOut = new HashSet<>();
@@ -135,7 +157,8 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
         for (String agent : timedOut) {
             pendingAck.remove(agent);
             pendingAckSentTick.remove(agent);
-            lastSentTick.put(agent, currentTick - MIN_TICKS_BETWEEN_SENDS);
+            pendingGraph.remove(agent);
+            //lastSentTick.put(agent, currentTick - MIN_TICKS_BETWEEN_SENDS);
         }
     }
 
