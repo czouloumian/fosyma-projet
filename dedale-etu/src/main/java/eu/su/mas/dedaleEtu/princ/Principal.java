@@ -57,7 +57,6 @@ public class Principal {
 			//2) create the gatekeeper (in charge of the environment), the agents, and add them to the platform.
 			agentList=createAgents(containerList);
 
-			//3) launch agents
 			startAgents(agentList);
 		}else{
 			//We only have to create the local container and our agents

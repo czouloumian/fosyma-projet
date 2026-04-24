@@ -80,10 +80,10 @@ public final class ConfigurationFile {
 	 */
 	//public static String INSTANCE_TOPOLOGY=null;
 	
-	public static String INSTANCE_TOPOLOGY="resources/topology/map2020-topologyExam1-graph.dgs";
+	//public static String INSTANCE_TOPOLOGY="resources/topology/map2020-topologyExam1-graph.dgs";
 	//public static String INSTANCE_TOPOLOGY="resources/topology/HouatTopology";
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2025-topologyExam";
-	//public static String INSTANCE_TOPOLOGY="resources/topology/map2021-topologyExam1-graph.dgs";
+	public static String INSTANCE_TOPOLOGY="resources/topology/map2021-topologyExam1-graph.dgs";
 	//public static String INSTANCE_TOPOLOGY="resources/interlocking/mapInterlocking2-topology";
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2023-topologyExam.dgs";
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2020-topologyExam1-graph.dgs";
@@ -99,7 +99,6 @@ public final class ConfigurationFile {
 	 */
 	// If the environment is loaded but you do not want to define elements on the map
 	public static String INSTANCE_CONFIGURATION_ELEMENTS="resources/distributedExploration/emptyMap";
-	
 	// otherwise
 	//public static String INSTANCE_CONFIGURATION_ELEMENTS="resources/treasureHunt/map2019-elementsExam1";
 	//public static String INSTANCE_CONFIGURATION_ELEMENTS="resources/treasureHunt/Houat-elements";
@@ -124,7 +123,7 @@ public final class ConfigurationFile {
 	 */
 	public static Integer ENVIRONMENT_SIZE=4;
 	// Parameters required for some generators (see dedale.gitlab.io)
-	public static Integer OPTIONAL_ADDITIONAL_ENVGENERATOR_PARAM1=1;//used by the BARABASI_ALBERT generator to know the number of children
+	public static Integer OPTIONAL_ADDITIONAL_ENVGENERATOR_PARAM1=1;//used by the BARABASI_ALBERT generator to know the number of childs
 	public static Integer[] GENERATOR_PARAMETERS= {ENVIRONMENT_SIZE,OPTIONAL_ADDITIONAL_ENVGENERATOR_PARAM1};
 
 	/**
@@ -163,6 +162,7 @@ public final class ConfigurationFile {
 	 */
 	//public static String INSTANCE_CONFIGURATION_ENTITIES=null;
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo.json";
+	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo2.json";
 	public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo2.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1tanker.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1human.json";

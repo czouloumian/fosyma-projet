@@ -11,7 +11,7 @@
   "detectionRadius": 0,
   "strengthExpertise": 2,
   "lockPickingExpertise":1,
-  "userParameters": ["Tim", "Bob"]
+  "userParameters": ["Tim", "Bob","Olanna","Josie"]
   },
   { 
     "agentType":"agentExplo",
@@ -25,24 +25,62 @@
     "detectionRadius": 0,
     "strengthExpertise": 2,
     "lockPickingExpertise":1,
-    "userParameters": ["Elsa", "Bob"]
+    "userParameters": ["Elsa", "Bob","Olanna","Josie"]
     },
   	{ 
-  	    "agentType":"agentExplo",
-  	    "agentName": "Bob",
-  	    "agentClass":"dummies.explo.ExploreCoopAgent",
-  	    "agentInitialContainer":"container2",
-  	    "communicationRange": 3,
-  	    "initialLocation": "free",
-  	    "backPackCapacityGold": -1,
-  	    "backPackCapacityDiamond":-1, 
-  	    "detectionRadius": 0,
-  	    "strengthExpertise": 2,
-  	    "lockPickingExpertise":1,
-  	    "userParameters": ["Elsa", "Tim"]
-  	  }
-		
-		
-	
-	
+    "agentType":"agentExplo",
+    "agentName": "Bob",
+    "agentClass":"dummies.explo.ExploreCoopAgent",
+    "agentInitialContainer":"container2",
+    "communicationRange": 3,
+    "initialLocation": "free",
+    "backPackCapacityGold": -1,
+    "backPackCapacityDiamond":-1, 
+    "detectionRadius": 0,
+    "strengthExpertise": 2,
+    "lockPickingExpertise":1,
+    "userParameters": ["Elsa", "Tim","Olanna","Josie"]
+  },
+  { 
+	  "agentType":"agentExplo",
+	  "agentName": "Olanna",
+	  "agentClass":"dummies.explo.ExploreCoopAgent",
+	  "agentInitialContainer":"container2",
+	  "communicationRange": 3,
+	  "initialLocation": "free",
+	  "backPackCapacityGold": -1,
+	  "backPackCapacityDiamond":-1, 
+	  "detectionRadius": 0,
+	  "strengthExpertise": 2,
+	  "lockPickingExpertise":1,
+	  "userParameters": ["Elsa", "Tim", "Bob","Josie"]
+    },
+	{ 
+	 "agentType":"agentExplo",
+	 "agentName": "Josie",
+	 "agentClass":"dummies.explo.ExploreCoopAgent",
+	 "agentInitialContainer":"container2",
+	 "communicationRange": 3,
+	 "initialLocation": "free",
+	 "backPackCapacityGold": -1,
+	 "backPackCapacityDiamond":-1, 
+	 "detectionRadius": 0,
+	 "strengthExpertise": 2,
+	 "lockPickingExpertise":1,
+	 "userParameters": ["Elsa", "Tim", "Bob","Olanna"]
+	   },
+  { 
+    "agentType":"wumpus",
+    "agentName": "Golem",
+    "agentClass":"dummies.DummyMovingAgent",
+    "agentInitialContainer":"container2",
+    "communicationRange": 3,
+    "initialLocation": "free",
+    "backPackCapacityGold": -1,
+    "backPackCapacityDiamond":-1, 
+    "detectionRadius": 1,
+    "strengthExpertise": 2,
+    "lockPickingExpertise":1,
+    "userParameters": ["paramTest"]
+    }
 ]

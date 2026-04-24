@@ -41,13 +41,14 @@ public class RandomWalkBehaviour extends TickerBehaviour{
 			List<Couple<Location,List<Couple<Observation,String>>>> lobs=((AbstractDedaleAgent)this.myAgent).observe();//myPosition
 			System.out.println(this.myAgent.getLocalName()+" -- list of observables: "+lobs);
 
-			//Little pause to allow you to follow what is going on
+			//Little pause to allow you to follow what is going on 
+			/*
 			try {
 				System.out.println("Press enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
 				System.in.read();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			}*/
 			
 			//list of observations associated to the currentPosition
 			List<Couple<Observation,String>> lObservations= lobs.get(0).getRight();

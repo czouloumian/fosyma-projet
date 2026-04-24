@@ -14,6 +14,7 @@ import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import eu.su.mas.dedaleEtu.mas.behaviours.ShareMapBehaviourBest;
+import eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent;
 
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -67,6 +68,7 @@ public class ExploCoopBehaviourBest extends SimpleBehaviour {
 
 		if(this.myMap==null) {
 			this.myMap= new MapRepresentation(this.myAgent.getLocalName());
+			((ExploreCoopAgent) this.myAgent).myMap = this.myMap;
 			this.myAgent.addBehaviour(new ShareMapBehaviourBest(this.myAgent,500,this.myMap,list_agentNames));
 		}
 

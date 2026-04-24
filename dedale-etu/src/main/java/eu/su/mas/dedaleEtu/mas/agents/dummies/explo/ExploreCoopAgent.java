@@ -7,6 +7,7 @@ import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedale.mas.agent.behaviours.platformManagment.*;
 
 import eu.su.mas.dedaleEtu.mas.behaviours.ExploCoopBehaviour;
+import eu.su.mas.dedaleEtu.mas.behaviours.HuntBehaviour;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 
 import jade.core.behaviours.Behaviour;
@@ -42,7 +43,8 @@ import eu.su.mas.dedale.env.EntityCharacteristics;
 public class ExploreCoopAgent extends AbstractDedaleAgent {
 
 	private static final long serialVersionUID = -7969469610241668140L;
-	private MapRepresentation myMap;
+	//private MapRepresentation myMap;
+	public MapRepresentation myMap = null;
 	
 
 	/**
@@ -55,8 +57,7 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 	protected void setup(){
 
 		super.setup();
-		
-		//get the parameters added to the agent at creation (if any)
+
 		final Object[] args = getArguments();
 		
 		List<String> list_agentNames=new ArrayList<String>();
@@ -90,6 +91,8 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 		
 		List<Behaviour> lb=new ArrayList<Behaviour>();
 		
+
+		
 		/************************************************
 		 * 
 		 * ADD the behaviours of the Dummy Moving Agent
@@ -97,12 +100,23 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 		 ************************************************/
 		
 		//this.myMap = new MapRepresentation(this.getLocalName());
+	
 		
-		lb.add(new ExploCoopBehaviour(this,this.myMap,list_agentNames));
+		//lb.add(new ExploCoopBehaviour(this,this.myMap,list_agentNames));
+		
+		
+		HuntBehaviour hunt = new HuntBehaviour(this, list_agentNames);
+		addBehaviour(hunt);
+		
 
 		//lb.add(new ReceiveMapBehaviour((Agent) this, this.myMap));)
 		
 		//lb.add(new ReceiveMapBehaviour(this, this.myMap));
+		
+		lb.add(new ExploCoopBehaviour(this, this.myMap, list_agentNames));
+		lb.add(hunt);
+
+		
 		/***
 		 * MANDATORY TO ALLOW YOUR AGENT TO BE DEPLOYED CORRECTLY
 		 */

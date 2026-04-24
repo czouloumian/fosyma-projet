@@ -33,6 +33,7 @@ public class DummyMovingAgent extends AbstractDedaleAgent{
 	 *	 		2) add the behaviours
 	 *          
 	 */
+	
 	protected void setup(){
 		super.setup();
 
@@ -52,15 +53,14 @@ public class DummyMovingAgent extends AbstractDedaleAgent{
 		lb.add(new RandomWalkBehaviour(this));
 		lb.add(new SayHelloBehaviour(this));
 		
+	
 		
 		/***
 		 * MANDATORY TO ALLOW YOUR AGENT TO BE DEPLOYED CORRECTLY
 		 */
-		
+	
 		addBehaviour(new StartMyBehaviours(this,lb));
-
 	}
-
 
 	/**
 	 * This method is automatically called after doDelete()
