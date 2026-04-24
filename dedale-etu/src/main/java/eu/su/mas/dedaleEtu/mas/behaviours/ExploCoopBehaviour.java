@@ -16,6 +16,7 @@ import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import eu.su.mas.dedaleEtu.mas.behaviours.ShareMapBehaviourBest;
+import eu.su.mas.dedaleEtu.mas.behaviours.HuntBehaviour;
 import eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent;
 
 import jade.core.behaviours.SimpleBehaviour;
@@ -43,6 +44,8 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 	private static final long serialVersionUID = 8567689731496787661L;
 
 	private boolean finished = false;
+	
+	private boolean initialized = false;
 
 	/**
 	 * Current knowledge of the agent regarding the environment
@@ -68,8 +71,14 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 
 	@Override
 	public void action() {
+		
+		if (((ExploreCoopAgent) this.myAgent).huntStarted) {
+		    finished = true;
+		    return;
+		}
 
-		if(this.myMap==null) {
+		if(!initialized) {
+			initialized = true;
 			this.myMap= new MapRepresentation(this.myAgent.getLocalName());
 			((ExploreCoopAgent) this.myAgent).myMap = this.myMap;
 			this.myAgent.addBehaviour(new ShareMapBehaviourBest(this.myAgent,500,this.myMap,list_agentNames));
@@ -127,6 +136,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				//Explo finished
 				finished=true;
 				System.out.println(this.myAgent.getLocalName()+" - Exploration successufully done, behaviour removed.");
+				myAgent.addBehaviour(new HuntBehaviour((AbstractDedaleAgent) myAgent, list_agentNames)); 
 			}else{
 				//4) select next move.
 				//4.1 If there exist one open node directly reachable, go for it,

@@ -53,6 +53,8 @@ public class HuntBehaviour extends TickerBehaviour {
     @Override
     public void onTick() {
         AbstractDedaleAgent me = (AbstractDedaleAgent) this.myAgent;
+        
+        System.out.println("[" + myName + "] HuntBehaviour onTick | state=" + state + " role=" + role);
 
         processMessages(me);
 
@@ -71,11 +73,13 @@ public class HuntBehaviour extends TickerBehaviour {
 
     private void checkForStench(AbstractDedaleAgent me) {
         Location pos = me.getCurrentPosition();
+        System.out.println("[" + myName + "] checkForStench | pos=" + (pos != null ? pos.getLocationId() : "null"));
         if (pos == null) return;
 
         var observations = me.observe();
         for (var nodeObs : observations) {
             for (var obs : nodeObs.getRight()) {
+            	System.out.println("[" + myName + "] obs: " + obs.getLeft() + " sur " + nodeObs.getLeft().getLocationId());
                 if (obs.getLeft() == Observation.STENCH) {
                     String stenchNode = nodeObs.getLeft().getLocationId();
                     String trap = HuntCoordinator.computeTrapNode(getGraph());
@@ -106,6 +110,9 @@ public class HuntBehaviour extends TickerBehaviour {
             MessageTemplate.MatchPerformative(ACLMessage.INFORM),
             MessageTemplate.MatchOntology("HUNT"));
         ACLMessage msg = me.receive(mt);
+        
+        System.out.println("[" + myName + "] processMessages → msg=" + (msg != null ? msg.getContent() : "null"));
+        
         if (msg == null) return;
 
         String content = msg.getContent();
@@ -121,10 +128,16 @@ public class HuntBehaviour extends TickerBehaviour {
 
 
     private void assignRoleAndTarget(String detectedGolemNode, String trap) {
-        this.golemNode = detectedGolemNode;
+    	
+    	this.golemNode = detectedGolemNode;
         this.trapNode = trap;
+        
+        ((ExploreCoopAgent) this.myAgent).huntStarted = true;
+        
+        List<String> fullList = new ArrayList<>(allAgentNames);
+        if (!fullList.contains(myName)) fullList.add(myName);
 
-        List<String> trappers = HuntCoordinator.getTrappers(allAgentNames);
+        List<String> trappers = HuntCoordinator.getTrappers(fullList);
         this.role = trappers.contains(myName) ? HuntRole.TRAPPER : HuntRole.PUSHER;
 
         if (role == HuntRole.TRAPPER) {
@@ -134,8 +147,11 @@ public class HuntBehaviour extends TickerBehaviour {
         } else {
             List<String> blockingSpots = HuntCoordinator.getBlockingPositions(
                 golemNode, trapNode, getGraph());
-            List<String> pushers = HuntCoordinator.getPushers(allAgentNames);
-            int idx = pushers.indexOf(myName) % Math.max(1, blockingSpots.size());
+            List<String> pushers = HuntCoordinator.getPushers(fullList);
+            //int idx = pushers.indexOf(myName) % Math.max(1, blockingSpots.size());
+            int idx = pushers.indexOf(myName);
+            if (idx < 0) idx = 0; // fallback si le nom n'est pas trouvé
+            idx = idx % Math.max(1, blockingSpots.size());
             this.myTargetNode = blockingSpots.isEmpty() ? golemNode : blockingSpots.get(idx);
             this.state = HuntState.BLOCKING;
             System.out.println("[" + myName + "] Role: PUSHER → blocking at " + myTargetNode);
@@ -180,8 +196,16 @@ public class HuntBehaviour extends TickerBehaviour {
                         golemNode = newGolemArea;
                         List<String> blockingSpots = HuntCoordinator.getBlockingPositions(
                             golemNode, trapNode, getGraph());
-                        List<String> pushers = HuntCoordinator.getPushers(allAgentNames);
-                        int idx = pushers.indexOf(myName) % Math.max(1, blockingSpots.size());
+
+                        // CORRECTION : inclure myName comme dans assignRoleAndTarget
+                        List<String> fullList = new ArrayList<>(allAgentNames);
+                        if (!fullList.contains(myName)) fullList.add(myName);
+                        List<String> pushers = HuntCoordinator.getPushers(fullList);
+
+                        int idx = pushers.indexOf(myName);
+                        if (idx < 0) idx = 0;
+                        idx = idx % Math.max(1, blockingSpots.size());
+
                         myTargetNode = blockingSpots.isEmpty() ? golemNode : blockingSpots.get(idx);
                         System.out.println("[" + myName + "] Golem moved → new block target: " + myTargetNode);
                     }

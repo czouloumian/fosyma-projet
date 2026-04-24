@@ -14,7 +14,6 @@ import jade.core.behaviours.Behaviour;
 
 import jade.core.Agent;
 
-import eu.su.mas.dedaleEtu.mas.behaviours.ReceiveMapBehaviour;
 
 import eu.su.mas.dedale.env.EntityCharacteristics;
 
@@ -45,6 +44,7 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 	private static final long serialVersionUID = -7969469610241668140L;
 	//private MapRepresentation myMap;
 	public MapRepresentation myMap = null;
+	public boolean huntStarted = false;
 	
 
 	/**
@@ -104,18 +104,14 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 		
 		//lb.add(new ExploCoopBehaviour(this,this.myMap,list_agentNames));
 		
-		
-		HuntBehaviour hunt = new HuntBehaviour(this, list_agentNames);
-		addBehaviour(hunt);
-		
 
 		//lb.add(new ReceiveMapBehaviour((Agent) this, this.myMap));)
 		
 		//lb.add(new ReceiveMapBehaviour(this, this.myMap));
 		
+		
 		lb.add(new ExploCoopBehaviour(this, this.myMap, list_agentNames));
-		lb.add(hunt);
-
+		
 		
 		/***
 		 * MANDATORY TO ALLOW YOUR AGENT TO BE DEPLOYED CORRECTLY

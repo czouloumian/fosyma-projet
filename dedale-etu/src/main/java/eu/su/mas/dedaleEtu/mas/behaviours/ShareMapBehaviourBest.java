@@ -37,6 +37,8 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
     // Compteur de ticks interne
     private int currentTick;
     
+    private boolean explorationDone = false;
+    
     private Set<String> pendingAck = new HashSet<>();
     
     private Map<String, SerializableSimpleGraph<String, MapAttribute>> pendingGraph = new HashMap<>();
@@ -55,25 +57,20 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
 
     @Override
     protected void onTick() {
-        System.out.println("[" + myAgent.getLocalName() + "] onTick receivers = " + receivers);
-
-        checkAcknowledgements(); // ← met à jour lastSentTick quand ACK reçu
-
-        // Fin du behaviour si exploration terminée
-        /*if (!myMap.hasOpenNode()) {
-            System.out.println("[" + myAgent.getLocalName() + "] Exploration terminée, arrêt du ShareMapBehaviour");
+        checkAcknowledgements();
+        
+        if (((eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent) myAgent).huntStarted) {
+            System.out.println("[" + myAgent.getLocalName() + "] Hunt démarré → arrêt ShareMap");
             stop();
             return;
-        }*/
-        
+        }
+
         if (!myMap.hasOpenNode()) {
-            // Si plus de nœuds ouverts, les ACK en attente ne bloquent plus l'arrêt
             if (pendingAck.isEmpty()) {
                 System.out.println("[" + myAgent.getLocalName() + "] Exploration terminée + ACK OK, arrêt");
                 stop();
                 return;
             }
-            // On attend encore un peu, mais si timeout global → on force l'arrêt
             boolean allTimedOut = pendingAck.stream().allMatch(agent ->
                 currentTick - pendingAckSentTick.getOrDefault(agent, 0) > ACK_TIMEOUT
             );
@@ -82,6 +79,8 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
                 stop();
                 return;
             }
+            // Exploration terminée mais ACK encore en attente → on n'envoie plus rien
+            return;
         }
 
         currentTick++;
@@ -95,7 +94,6 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
 
         for (String agentName : receivers) {
 
-            // Ne pas renvoyer si on attend déjà un ACK
             if (pendingAck.contains(agentName)) {
                 System.out.println("  → " + agentName + " : en attente d'ACK, skip");
                 continue;
@@ -125,7 +123,6 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
             }
 
             sendMap(agentName, currentGraph);
-            // ← plus de lastSentTick.put ici, on attend l'ACK
             pendingGraph.put(agentName, currentGraph);
             pendingAck.add(agentName);
             pendingAckSentTick.put(agentName, currentTick);
@@ -157,6 +154,8 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
         for (String agent : timedOut) {
             pendingAck.remove(agent);
             pendingAckSentTick.remove(agent);
+            lastSentGraph.put(agent, pendingGraph.get(agent));
+            lastSentTick.put(agent, currentTick);
             pendingGraph.remove(agent);
             //lastSentTick.put(agent, currentTick - MIN_TICKS_BETWEEN_SENDS);
         }
