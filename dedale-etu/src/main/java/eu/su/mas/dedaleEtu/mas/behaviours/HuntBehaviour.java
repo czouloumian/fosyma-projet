@@ -17,12 +17,12 @@ import java.util.*;
  * They broadcast which node they are claiming so no two agents pick the same one.
  *
  * Protocol (every tick):
- *  1. Observe: am I on a stench node? Good — broadcast my claim and stay.
- *  2. Can I see stench nodes? Pick the unclaimed one closest to me and move there.
- *  3. No stench visible? Move toward last known golem area, or patrol randomly.
+ *  1. If on stench node, send messahe and stay
+ *  2. If can see a stench node, pick one that is unoccupied and go there
+ *  3. If no stench node visible, explore or go where the golem was last
  *
  * Claim messages: "CLAIM:<agentName>:<nodeId>"
- * Agents share claims every tick so the assignment stays live.
+ * Agents share claims every tick =
  */
 public class HuntBehaviour extends TickerBehaviour {
 
@@ -32,13 +32,10 @@ public class HuntBehaviour extends TickerBehaviour {
     private final List<String> allAgentNames;
     private final String myName;
 
-    // Claims received this tick: agentName → nodeId they are heading to / on
     private final Map<String, String> claims = new HashMap<>();
 
-    // Last known stench area (to navigate toward when Golem out of sight)
     private String lastKnownStenchNode = null;
 
-    // My current claimed node
     private String myClaimedNode = null;
 
     public HuntBehaviour(AbstractDedaleAgent agent, List<String> allAgentNames) {
@@ -53,38 +50,29 @@ public class HuntBehaviour extends TickerBehaviour {
 
         AbstractDedaleAgent me = (AbstractDedaleAgent) this.myAgent;
 
-        // Step 1: collect all claims from other agents sent this tick
         receiveClaims(me);
 
-        // Step 2: observe current surroundings
         Location cur = me.getCurrentPosition();
         if (cur == null) return;
 
         List<String> stenchNodes = findStenchNodes(me);
 
         if (stenchNodes.isEmpty()) {
-            // No stench visible — move toward last known area or patrol
             clearMyClaim(me);
             navigateTowardGolem(me, cur);
             return;
         }
 
-        // We can see stench — update last known
         lastKnownStenchNode = stenchNodes.get(0);
-
-        // Step 3: pick my target — unclaimed stench node closest to me
         String target = pickTarget(me, cur, stenchNodes);
 
         if (target == null) {
-            // All stench nodes claimed by others — just stay put or move to closest
             target = stenchNodes.get(0);
         }
 
-        // Step 4: broadcast my claim
         myClaimedNode = target;
         broadcastClaim(me, target);
 
-        // Step 5: move toward target (or stay if already there)
         if (cur.getLocationId().equals(target)) {
             System.out.println("[" + myName + "] On stench node " + target + " ✓");
         } else {
@@ -92,10 +80,8 @@ public class HuntBehaviour extends TickerBehaviour {
         }
     }
 
-    // ── Claim selection ───────────────────────────────────────────────────────
 
     private String pickTarget(AbstractDedaleAgent me, Location cur, List<String> stenchNodes) {
-        // Remove nodes claimed by others
         Set<String> takenByOthers = new HashSet<>();
         for (Map.Entry<String, String> e : claims.entrySet()) {
             if (!e.getKey().equals(myName)) {
@@ -105,7 +91,6 @@ public class HuntBehaviour extends TickerBehaviour {
 
         MapRepresentation map = ((ExploreCoopAgent) me).myMap;
 
-        // Sort stench nodes by distance from current position
         List<String> candidates = new ArrayList<>(stenchNodes);
         if (map != null) {
             candidates.sort(Comparator.comparingInt(n -> {
@@ -114,7 +99,6 @@ public class HuntBehaviour extends TickerBehaviour {
             }));
         }
 
-        // Pick closest unclaimed node; if my current claim is still free, prefer it (stability)
         if (myClaimedNode != null && candidates.contains(myClaimedNode)
                 && !takenByOthers.contains(myClaimedNode)) {
             return myClaimedNode;
@@ -129,14 +113,12 @@ public class HuntBehaviour extends TickerBehaviour {
         return null; // all taken
     }
 
-    // ── Navigation ────────────────────────────────────────────────────────────
 
     private void navigateTowardGolem(AbstractDedaleAgent me, Location cur) {
         if (lastKnownStenchNode != null) {
             System.out.println("[" + myName + "] No stench visible — moving toward last known: " + lastKnownStenchNode);
             moveToward(me, lastKnownStenchNode);
         } else {
-            // Truly lost — move to a random neighbor
             var obs = me.observe();
             if (obs == null || obs.isEmpty()) return;
             obs.stream()
@@ -167,8 +149,6 @@ public class HuntBehaviour extends TickerBehaviour {
         }
     }
 
-    // ── Stench detection ──────────────────────────────────────────────────────
-
     /**
      * Returns all stench nodes visible from current position, excluding current node.
      */
@@ -191,20 +171,20 @@ public class HuntBehaviour extends TickerBehaviour {
         return result;
     }
 
-    // ── Messaging ─────────────────────────────────────────────────────────────
 
     private void broadcastClaim(AbstractDedaleAgent me, String nodeId) {
-        ACLMessage acl = new ACLMessage(ACLMessage.INFORM);
-        acl.setOntology(ONTOLOGY);
-        acl.setContent(CLAIM + myName + ":" + nodeId);
+        String content = CLAIM + myName + ":" + nodeId;
         for (String name : allAgentNames) {
+            ACLMessage acl = new ACLMessage(ACLMessage.INFORM);
+            acl.setSender(me.getAID());
+            acl.setOntology(ONTOLOGY);
+            acl.setContent(content);
             acl.addReceiver(new AID(name, AID.ISLOCALNAME));
+            me.sendMessage(acl);
         }
-        me.send(acl);
     }
 
     private void receiveClaims(AbstractDedaleAgent me) {
-        // Clear old claims each tick — only keep what's fresh
         claims.clear();
         claims.put(myName, myClaimedNode != null ? myClaimedNode : "");
 
@@ -216,7 +196,6 @@ public class HuntBehaviour extends TickerBehaviour {
         while ((msg = me.receive(mt)) != null) {
             String content = msg.getContent();
             if (content == null || !content.startsWith(CLAIM)) continue;
-            // Format: CLAIM:<agentName>:<nodeId>
             String[] parts = content.substring(CLAIM.length()).split(":", 2);
             if (parts.length == 2) {
                 claims.put(parts[0], parts[1]);
@@ -226,13 +205,14 @@ public class HuntBehaviour extends TickerBehaviour {
 
     private void clearMyClaim(AbstractDedaleAgent me) {
         myClaimedNode = null;
-        // Broadcast empty claim so others know we're not holding a node
-        ACLMessage acl = new ACLMessage(ACLMessage.INFORM);
-        acl.setOntology(ONTOLOGY);
-        acl.setContent(CLAIM + myName + ":");
+        String content = CLAIM + myName + ":";
         for (String name : allAgentNames) {
+            ACLMessage acl = new ACLMessage(ACLMessage.INFORM);
+            acl.setSender(me.getAID());
+            acl.setOntology(ONTOLOGY);
+            acl.setContent(content);
             acl.addReceiver(new AID(name, AID.ISLOCALNAME));
+            me.sendMessage(acl);
         }
-        me.send(acl);
     }
 }
