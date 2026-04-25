@@ -109,6 +109,8 @@ public class ExploCoopBehaviourBest extends SimpleBehaviour {
 				//Explo finished
 				finished=true;
 				System.out.println(this.myAgent.getLocalName()+" - Exploration successufully done, behaviour removed.");
+				((ExploreCoopAgent) this.myAgent).explorationDone = true;
+				myAgent.addBehaviour(new HuntBehaviour((AbstractDedaleAgent) myAgent, list_agentNames)); 
 			}else{
 				//4) select next move.
 				//4.1 If there exist one open node directly reachable, go for it,

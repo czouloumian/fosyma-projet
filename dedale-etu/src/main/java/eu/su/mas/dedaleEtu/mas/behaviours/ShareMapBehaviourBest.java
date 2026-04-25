@@ -58,13 +58,7 @@ public class ShareMapBehaviourBest extends TickerBehaviour {
     @Override
     protected void onTick() {
         checkAcknowledgements();
-        
-        if (((eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent) myAgent).huntStarted) {
-            System.out.println("[" + myAgent.getLocalName() + "] Hunt démarré → arrêt ShareMap");
-            stop();
-            return;
-        }
-
+    
         if (!myMap.hasOpenNode()) {
             if (pendingAck.isEmpty()) {
                 System.out.println("[" + myAgent.getLocalName() + "] Exploration terminée + ACK OK, arrêt");

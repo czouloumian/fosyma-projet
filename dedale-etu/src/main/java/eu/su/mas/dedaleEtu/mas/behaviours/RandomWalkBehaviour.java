@@ -48,7 +48,7 @@ public class RandomWalkBehaviour extends TickerBehaviour{
 				System.in.read();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}*/
+			} */
 			
 			//list of observations associated to the currentPosition
 			List<Couple<Observation,String>> lObservations= lobs.get(0).getRight();

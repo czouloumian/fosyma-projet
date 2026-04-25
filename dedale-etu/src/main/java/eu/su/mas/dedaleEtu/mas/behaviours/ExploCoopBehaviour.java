@@ -71,11 +71,6 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 
 	@Override
 	public void action() {
-		
-		if (((ExploreCoopAgent) this.myAgent).huntStarted) {
-		    finished = true;
-		    return;
-		}
 
 		if(!initialized) {
 			initialized = true;
@@ -136,6 +131,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				//Explo finished
 				finished=true;
 				System.out.println(this.myAgent.getLocalName()+" - Exploration successufully done, behaviour removed.");
+				((ExploreCoopAgent) this.myAgent).explorationDone = true;
 				myAgent.addBehaviour(new HuntBehaviour((AbstractDedaleAgent) myAgent, list_agentNames)); 
 			}else{
 				//4) select next move.

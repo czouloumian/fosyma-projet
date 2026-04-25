@@ -44,7 +44,7 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 	private static final long serialVersionUID = -7969469610241668140L;
 	//private MapRepresentation myMap;
 	public MapRepresentation myMap = null;
-	public boolean huntStarted = false;
+	public boolean explorationDone = false;
 	
 
 	/**
@@ -111,6 +111,7 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 		
 		
 		lb.add(new ExploCoopBehaviour(this, this.myMap, list_agentNames));
+		lb.add(new HuntBehaviour(this, list_agentNames));
 		
 		
 		/***
