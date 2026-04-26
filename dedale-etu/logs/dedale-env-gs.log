@@ -4048,3 +4048,955 @@
 17:48:38.167 [Olanna] ERROR - Olanna - moveTo : target [null] is not reachable from current position [M16]
 17:48:40.191 [Olanna] ERROR - Olanna - moveTo : target [null] is not reachable from current position [M16]
 17:49:19.652 [Olanna] ERROR - Olanna - moveTo : target [null] is not reachable from current position [M16]
+17:52:54.691 [GK] INFO  - Loading configuration for environment MultiTypesV2
+17:52:54.692 [GK] INFO  - Generator type:MANUAL
+17:52:56.643 [Tim] INFO  - Entity Tim deployed in 75
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+17:52:56.656 [Bob] INFO  - Entity Bob deployed in 108
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+17:52:56.663 [Golem] INFO  - Entity Golem deployed in M39
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+17:52:56.686 [Josie] INFO  - Entity Josie deployed in 68
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+17:52:56.690 [Elsa] INFO  - Entity Elsa deployed in 50
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+17:52:56.692 [Olanna] INFO  - Entity Olanna deployed in 4
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+17:54:30.668 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M40]
+17:54:49.795 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:54:55.840 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:54:57.844 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:54:57.849 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:54:59.851 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:54:59.855 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:01.854 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:55:01.860 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:03.863 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:55:03.867 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:05.868 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:55:05.872 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:07.874 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:55:07.877 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:09.881 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:55:09.883 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:09.894 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [M30]
+17:55:11.886 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:55:11.889 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:13.894 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:55:13.897 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:15.900 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:55:15.910 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:15.914 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [M30]
+17:55:17.910 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M29]
+17:55:17.919 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:17.924 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [M30]
+17:55:19.926 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:55:21.934 [Elsa] ERROR - Elsa - moveTo : target [null] is not reachable from current position [M31]
+17:59:19.585 [GK] INFO  - Loading configuration for environment MultiTypesV2
+17:59:19.587 [GK] INFO  - Generator type:MANUAL
+17:59:21.613 [Tim] INFO  - Entity Tim deployed in 117
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+17:59:21.620 [Olanna] INFO  - Entity Olanna deployed in 61
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+17:59:21.625 [Josie] INFO  - Entity Josie deployed in 94
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+17:59:21.630 [Elsa] INFO  - Entity Elsa deployed in 35
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+17:59:21.643 [Golem] INFO  - Entity Golem deployed in M8
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+17:59:21.659 [Bob] INFO  - Entity Bob deployed in 76
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+18:01:03.388 [Olanna] ERROR - Olanna - moveTo : target [null] is not reachable from current position [M40]
+18:01:04.367 [Olanna] ERROR - Olanna - moveTo : target [null] is not reachable from current position [M40]
+18:01:05.373 [Olanna] ERROR - Olanna - moveTo : target [null] is not reachable from current position [M40]
+18:01:59.003 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M34]
+18:02:01.022 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M34]
+18:02:03.032 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M34]
+18:02:14.093 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M34]
+18:02:16.102 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M34]
+18:02:18.109 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M34]
+18:02:26.148 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M34]
+18:02:32.177 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M9]
+18:02:34.186 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M9]
+18:02:36.201 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M9]
+18:02:38.211 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M9]
+18:02:40.223 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M9]
+18:02:42.245 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M9]
+18:06:22.743 [GK] INFO  - Loading configuration for environment MultiTypesV2
+18:06:22.745 [GK] INFO  - Generator type:MANUAL
+18:06:24.743 [Elsa] INFO  - Entity Elsa deployed in 128
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+18:06:24.757 [Tim] INFO  - Entity Tim deployed in 47
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+18:06:24.766 [Josie] INFO  - Entity Josie deployed in 49
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+18:06:24.778 [Golem] INFO  - Entity Golem deployed in M22
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+18:06:24.799 [Olanna] INFO  - Entity Olanna deployed in M8
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+18:06:24.804 [Bob] INFO  - Entity Bob deployed in M6
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+18:09:08.360 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [93]
+18:12:20.706 [GK] INFO  - Loading configuration for environment MultiTypesV2
+18:12:20.709 [GK] INFO  - Generator type:MANUAL
+18:12:22.721 [Tim] INFO  - Entity Tim deployed in 77
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+18:12:22.729 [Golem] INFO  - Entity Golem deployed in M28
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+18:12:22.779 [Bob] INFO  - Entity Bob deployed in 57
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+18:12:22.786 [Elsa] INFO  - Entity Elsa deployed in 88
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+18:12:22.791 [Olanna] INFO  - Entity Olanna deployed in 87
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+18:12:22.797 [Josie] INFO  - Entity Josie deployed in 53
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+18:17:51.708 [GK] INFO  - Loading configuration for environment MultiTypesV2
+18:17:51.711 [GK] INFO  - Generator type:MANUAL
+18:17:53.785 [Tim] INFO  - Entity Tim deployed in 35
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+18:17:53.813 [Josie] INFO  - Entity Josie deployed in 80
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+18:17:53.825 [Elsa] INFO  - Entity Elsa deployed in 40
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+18:17:53.834 [Golem] INFO  - Entity Golem deployed in M34
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+18:17:53.867 [Bob] INFO  - Entity Bob deployed in 43
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+18:17:53.876 [Olanna] INFO  - Entity Olanna deployed in 33
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+18:23:01.839 [GK] INFO  - Loading configuration for environment MultiTypesV2
+18:23:01.840 [GK] INFO  - Generator type:MANUAL
+18:23:03.851 [Josie] INFO  - Entity Josie deployed in 77
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+18:23:03.860 [Tim] INFO  - Entity Tim deployed in 51
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+18:23:03.868 [Elsa] INFO  - Entity Elsa deployed in 24
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+18:23:03.873 [Olanna] INFO  - Entity Olanna deployed in 39
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+18:23:03.882 [Golem] INFO  - Entity Golem deployed in 128
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+18:23:03.918 [Bob] INFO  - Entity Bob deployed in 32
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+18:33:31.014 [GK] INFO  - Loading configuration for environment MultiTypesV2
+18:33:31.019 [GK] INFO  - Generator type:MANUAL
+18:33:33.023 [Bob] INFO  - Entity Bob deployed in 48
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+18:33:33.033 [Olanna] INFO  - Entity Olanna deployed in 104
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+18:33:33.040 [Tim] INFO  - Entity Tim deployed in 120
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+18:33:33.046 [Elsa] INFO  - Entity Elsa deployed in 103
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+18:33:33.050 [Josie] INFO  - Entity Josie deployed in 93
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+18:33:33.054 [Golem] INFO  - Entity Golem deployed in 51
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+18:37:22.145 [GK] INFO  - Loading configuration for environment MultiTypesV2
+18:37:22.146 [GK] INFO  - Generator type:MANUAL
+18:37:24.286 [Olanna] INFO  - Entity Olanna deployed in 87
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+18:37:24.295 [Josie] INFO  - Entity Josie deployed in 105
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+18:37:24.303 [Tim] INFO  - Entity Tim deployed in M35
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+18:37:24.326 [Bob] INFO  - Entity Bob deployed in M1
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+18:37:24.339 [Golem] INFO  - Entity Golem deployed in 119
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+18:37:24.378 [Elsa] INFO  - Entity Elsa deployed in 14
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+18:38:04.351 [Olanna] ERROR - Olanna - moveTo : target [null] is not reachable from current position [107]
+18:38:05.384 [Olanna] ERROR - Olanna - moveTo : target [null] is not reachable from current position [107]
+18:38:06.395 [Olanna] ERROR - Olanna - moveTo : target [null] is not reachable from current position [107]
+18:38:40.116 [Bob] ERROR - Bob - moveTo : target [null] is not reachable from current position [M34]
+18:46:32.815 [GK] INFO  - Loading configuration for environment MultiTypesV2
+18:46:32.818 [GK] INFO  - Generator type:MANUAL
+18:46:34.939 [Golem] INFO  - Entity Golem deployed in 72
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+18:46:34.965 [Bob] INFO  - Entity Bob deployed in 23
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+18:46:34.972 [Tim] INFO  - Entity Tim deployed in M23
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+18:46:34.999 [Olanna] INFO  - Entity Olanna deployed in 126
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+18:46:35.006 [Elsa] INFO  - Entity Elsa deployed in M24
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+18:46:35.016 [Josie] INFO  - Entity Josie deployed in 120
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+18:47:20.521 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [18]
+18:47:21.526 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [18]
+18:51:08.950 [GK] INFO  - Loading configuration for environment MultiTypesV2
+18:51:08.953 [GK] INFO  - Generator type:MANUAL
+18:51:11.108 [Elsa] INFO  - Entity Elsa deployed in 95
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+18:51:11.117 [Golem] INFO  - Entity Golem deployed in 3
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+18:51:11.191 [Bob] INFO  - Entity Bob deployed in M15
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+18:51:11.205 [Tim] INFO  - Entity Tim deployed in 82
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+18:51:11.210 [Josie] INFO  - Entity Josie deployed in 83
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+18:51:11.217 [Olanna] INFO  - Entity Olanna deployed in 90
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+18:53:04.144 [Josie] ERROR - Josie - moveTo : target [null] is not reachable from current position [56]
+19:12:19.923 [GK] INFO  - Loading configuration for environment MultiTypesV2
+19:12:19.926 [GK] INFO  - Generator type:MANUAL
+19:12:21.924 [Tim] INFO  - Entity Tim deployed in 96
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+19:12:21.934 [Olanna] INFO  - Entity Olanna deployed in M8
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+19:12:21.939 [Elsa] INFO  - Entity Elsa deployed in 46
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+19:12:21.946 [Bob] INFO  - Entity Bob deployed in 54
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+19:12:21.951 [Golem] INFO  - Entity Golem deployed in M31
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+19:12:21.989 [Josie] INFO  - Entity Josie deployed in M19
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+19:13:52.450 [Josie] ERROR - Josie - moveTo : target [null] is not reachable from current position [M40]
+19:13:53.456 [Josie] ERROR - Josie - moveTo : target [null] is not reachable from current position [M40]
+19:13:54.462 [Josie] ERROR - Josie - moveTo : target [null] is not reachable from current position [M40]
+19:13:56.474 [Josie] ERROR - Josie - moveTo : target [null] is not reachable from current position [M40]
+19:44:24.473 [GK] INFO  - Loading configuration for environment MultiTypesV2
+19:44:24.474 [GK] INFO  - Generator type:MANUAL
+19:44:26.537 [Bob] INFO  - Entity Bob deployed in 109
+ Characteristics:  type : 
+ AgentName: Bob
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Olanna, Josie]
+19:44:26.545 [Tim] INFO  - Entity Tim deployed in 104
+ Characteristics:  type : 
+ AgentName: Tim
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Bob, Olanna, Josie]
+19:44:26.550 [Golem] INFO  - Entity Golem deployed in 96
+ Characteristics:  type : 
+ AgentName: Golem
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.DummyMovingAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: Wumpus
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 1
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [paramTest]
+19:44:26.578 [Elsa] INFO  - Entity Elsa deployed in 38
+ Characteristics:  type : 
+ AgentName: Elsa
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Tim, Bob, Olanna, Josie]
+19:44:26.587 [Olanna] INFO  - Entity Olanna deployed in 75
+ Characteristics:  type : 
+ AgentName: Olanna
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Josie]
+19:44:26.592 [Josie] INFO  - Entity Josie deployed in M2
+ Characteristics:  type : 
+ AgentName: Josie
+ 	 Instance of eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent
+ 	 Initial container: Ithaq_container2
+ 	 Initial location: null
+ 	 Entitytype: AgentExplo
+ 	 TreasureType : None; diamondCapa: -1; goldCapa: -1
+ 	 comReach: 3
+ 	 detection radius: 0
+ 	 Expertise: [<LockPicking, 1>, <Strength, 2>]
+ 	 UserParameters: [Elsa, Tim, Bob, Olanna]
+19:45:45.695 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [M34]
+19:45:46.313 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [79]
+19:45:47.517 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [79]
+19:45:48.119 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [79]
+19:45:48.722 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [79]
+19:45:48.734 [Tim] ERROR - Tim - moveTo : target [null] is not reachable from current position [79]

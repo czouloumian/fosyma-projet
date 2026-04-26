@@ -55,6 +55,10 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 
 	private List<String> list_agentNames;
 	
+	private int stuckCounter = 0;
+	private String lastPosition = null;
+	private String beforeLastPosition = null;
+	
 	
 
 /**
@@ -74,6 +78,11 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 
 	@Override
 	public void action() {
+		System.out.println("[" + myAgent.getLocalName() 
+	    + "] ExploCoop action | huntStarted=" + ((ExploreCoopAgent) myAgent).huntStarted
+	    + " | meetingPoint=" + ((ExploreCoopAgent) myAgent).meetingPoint
+	    + " | openNodes=" + (this.myMap != null ? this.myMap.getOpenNodes().size() : "null")
+	    + " | stuckCounter=" + stuckCounter);
 		
 		if (((ExploreCoopAgent) this.myAgent).huntStarted) {
 		    finished = true;
@@ -91,6 +100,17 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 		Location myPosition=((AbstractDedaleAgent)this.myAgent).getCurrentPosition();
 
 		if (myPosition!=null){
+			String currentPos = myPosition.getLocationId();
+		    
+		    if (currentPos.equals(lastPosition) || currentPos.equals(beforeLastPosition)) {
+		        stuckCounter++;
+		    } else {
+		        stuckCounter = 0;
+		    }
+		    
+		    beforeLastPosition = lastPosition;
+		    lastPosition = currentPos;
+		    
 			//List of observable from the agent's current position
 			List<Couple<Location,List<Couple<Observation,String>>>> lobs=((AbstractDedaleAgent)this.myAgent).observe();//myPosition
 			
@@ -135,14 +155,21 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 			}
 
 			//3) while openNodes is not empty, continues.
-			if (!this.myMap.hasOpenNode()){
-				//Explo finished
-				finished=true;
-				String center = computeCentralNode(this.myMap);
+			boolean forceEnd = stuckCounter > 15;
+			boolean naturalEnd = !this.myMap.hasOpenNode();
+
+			if (naturalEnd || forceEnd) {
+			    finished = true;
+			    ((ExploreCoopAgent) this.myAgent).huntStarted = true;
+			    String center = computeCentralNode(this.myMap);
 			    ((ExploreCoopAgent) this.myAgent).meetingPoint = center;
-			    System.out.println("[" + myAgent.getLocalName() 
-			        + "] Exploration terminée, RDV en " + center);
-			}else{
+			    System.out.println("[" + myAgent.getLocalName()
+			        + "] Fin exploration ("
+			        + (forceEnd ? "timeout stuck=" + stuckCounter : "naturelle")
+			        + ") | RDV en " + center
+			        + " | noeuds total : " + this.myMap.getSerializableGraph().getAllNodes().size());
+			    return;
+			}else {
 				//4) select next move.
 				//4.1 If there exist one open node directly reachable, go for it,
 				//	 otherwise choose one from the openNode list, compute the shortestPath and go for it

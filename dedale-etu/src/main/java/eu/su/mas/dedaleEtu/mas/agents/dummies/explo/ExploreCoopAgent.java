@@ -112,6 +112,7 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 		
 		
 		lb.add(new ExploCoopBehaviour(this, this.myMap, list_agentNames));
+		lb.add(new HuntBehaviour(this, list_agentNames));
 		
 		
 		/***
