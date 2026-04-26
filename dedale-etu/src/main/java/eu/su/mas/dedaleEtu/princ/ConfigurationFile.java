@@ -83,14 +83,14 @@ public final class ConfigurationFile {
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2020-topologyExam1-graph.dgs"; //reessayer avec
 	//public static String INSTANCE_TOPOLOGY="resources/topology/HouatTopology";  //reessayer avec
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2025-topologyExam";
-	public static String INSTANCE_TOPOLOGY="resources/topology/map2021-topologyExam1-graph.dgs";
+	//public static String INSTANCE_TOPOLOGY="resources/topology/map2021-topologyExam1-graph.dgs";
 	//public static String INSTANCE_TOPOLOGY="resources/interlocking/mapInterlocking2-topology"; //what is this j'arrive pas a la run
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2023-topologyExam.dgs"; //agents bloques??
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2020-topologyExam1-graph.dgs"; //agents bloques
 
-	//public static String INSTANCE_TOPOLOGY="resources/topology/map2022-topologyExam1-draft.dgs";
-	//public static String INSTANCE_TOPOLOGY="resources/topology/map2022-topologyExam-V2b.dgs";
-	//public static String INSTANCE_TOPOLOGY="resources/map2019-topologyExam1";
+	//public static String INSTANCE_TOPOLOGY="resources/topology/map2022-topologyExam1-draft.dgs"; //pareil, pb d'exploration
+	//public static String INSTANCE_TOPOLOGY="resources/topology/map2022-topologyExam-V2b.dgs"; //
+	public static String INSTANCE_TOPOLOGY="resources/map2019-topologyExam1";
 
 
 	
@@ -164,6 +164,7 @@ public final class ConfigurationFile {
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo2.json";
 	public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo2.json";
+	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo3.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1tanker.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1human.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1tanker-1collect.json";

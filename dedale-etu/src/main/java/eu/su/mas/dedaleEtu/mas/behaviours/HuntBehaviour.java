@@ -17,7 +17,7 @@ import java.util.*;
  * They broadcast which node they are claiming so no two agents pick the same one.
  *
  * Protocol (every tick):
- *  1. If on stench node, send messahe and stay
+ *  1. If on stench node, send message and stay
  *  2. If can see a stench node, pick one that is unoccupied and go there
  *  3. If no stench node visible, explore or go where the golem was last
  *
@@ -148,11 +148,13 @@ public class HuntBehaviour extends TickerBehaviour {
             }
         }
     }
+    
+    
 
     /**
      * Returns all stench nodes visible from current position, excluding current node.
-     */
-    private List<String> findStenchNodes(AbstractDedaleAgent me) {
+     */ 
+    /*private List<String> findStenchNodes(AbstractDedaleAgent me) {
         List<String> result = new ArrayList<>();
         Location cur = me.getCurrentPosition();
         var observations = me.observe();
@@ -169,9 +171,35 @@ public class HuntBehaviour extends TickerBehaviour {
             }
         }
         return result;
+    } */
+
+
+    private List<String> findStenchNodes(AbstractDedaleAgent me) {
+        List<String> result = new ArrayList<>();
+        Location cur = me.getCurrentPosition();
+        var observations = me.observe();
+        if (observations == null) return result;
+
+        for (var nodeObs : observations) {
+            String nodeId = nodeObs.getLeft().getLocationId();
+            if (cur != null && nodeId.equals(cur.getLocationId())) continue;
+
+            boolean hasStench = false;
+            boolean hasWumpus = false;
+
+            for (var obs : nodeObs.getRight()) {
+                if (obs.getLeft() == Observation.STENCH) hasStench = true;
+                if (obs.getLeft() == Observation.AGENTNAME 
+                    && "Wumpus".equals(obs.getRight())) hasWumpus = true;
+            }
+            if (hasStench && !hasWumpus) {
+                result.add(nodeId);
+            }
+        }
+        return result;
     }
-
-
+    
+    
     private void broadcastClaim(AbstractDedaleAgent me, String nodeId) {
         String content = CLAIM + myName + ":" + nodeId;
         for (String name : allAgentNames) {
