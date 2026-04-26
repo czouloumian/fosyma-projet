@@ -39,6 +39,8 @@ public class HuntBehaviour extends TickerBehaviour {
     private final Map<String, String> claims = new HashMap<>();
     private String lastKnownStenchNode = null;
     private String myClaimedNode = null;
+    private int patrolStuckCount = 0;
+    private String lastPatrolPos = null;
 
     public HuntBehaviour(AbstractDedaleAgent agent, List<String> allAgentNames) {
         super(agent, 600);
@@ -60,6 +62,7 @@ public class HuntBehaviour extends TickerBehaviour {
         if (((ExploreCoopAgent) me).myMap == null) return;
 
         processMessages(me);
+        updateGolemPosition(me);
 
         if (state == HuntState.MEETING) {
             goToMeetingPoint(me);
@@ -211,7 +214,14 @@ public class HuntBehaviour extends TickerBehaviour {
         if (map == null) return;
 
         if (patrolTarget == null || cur.getLocationId().equals(patrolTarget)) {
-            patrolTarget = pickFarNode(map, cur.getLocationId());
+            // Choisir un nœud très éloigné ET différent du dernier
+            String newTarget = null;
+            int attempts = 0;
+            while ((newTarget == null || newTarget.equals(patrolTarget)) && attempts < 20) {
+                newTarget = pickFarNode(map, cur.getLocationId());
+                attempts++;
+            }
+            patrolTarget = newTarget;
             System.out.println("[" + myName + "] Leader patrouille → " + patrolTarget);
         }
 
@@ -225,9 +235,26 @@ public class HuntBehaviour extends TickerBehaviour {
         MapRepresentation map = ((ExploreCoopAgent) me).myMap;
         if (map == null) return;
 
-        String leaderPos = agentPositions.get(getLeaderName());
-        if (leaderPos == null) return;
+        // Détecter si bloqué
+        if (cur.getLocationId().equals(lastPatrolPos)) {
+            patrolStuckCount++;
+        } else {
+            patrolStuckCount = 0;
+            lastPatrolPos = cur.getLocationId();
+        }
 
+        // Si bloqué → choisir un nœud lointain indépendamment du leader
+        if (patrolStuckCount > 5 || agentPositions.get(getLeaderName()) == null) {
+            if (myTargetNode == null || cur.getLocationId().equals(myTargetNode)) {
+                myTargetNode = pickFarNode(map, cur.getLocationId());
+                System.out.println("[" + myName + "] Follower bloqué → cible indépendante : " + myTargetNode);
+            }
+            broadcastStatus(me);
+            if (myTargetNode != null) moveToward(me, myTargetNode);
+            return;
+        }
+
+        String leaderPos = agentPositions.get(getLeaderName());
         String target = pickFormationNode(map, cur.getLocationId(), leaderPos);
         if (target != null && !target.equals(myTargetNode)) {
             myTargetNode = target;
@@ -634,43 +661,81 @@ public class HuntBehaviour extends TickerBehaviour {
     }
 
     private void navigateTowardGolem(AbstractDedaleAgent me, Location cur) {
-        if (lastKnownStenchNode != null) {
-            System.out.println("[" + myName + "] No stench — moving toward last known: " + lastKnownStenchNode);
-            moveToward(me, lastKnownStenchNode);
+        if (lastKnownStenchNode == null) {
+            // Vraiment aucune info → mouvement aléatoire
+            var obs = me.observe();
+            if (obs == null || obs.isEmpty()) return;
+
+            Set<String> occupiedByAgents = new HashSet<>();
+            for (var nodeObs : obs) {
+                for (var o : nodeObs.getRight()) {
+                    if (o.getLeft() == Observation.AGENTNAME) {
+                        occupiedByAgents.add(nodeObs.getLeft().getLocationId());
+                    }
+                }
+            }
+
+            List<String> freeNeighbors = new ArrayList<>();
+            for (var nodeObs : obs) {
+                String nodeId = nodeObs.getLeft().getLocationId();
+                if (!nodeId.equals(cur.getLocationId()) 
+                        && !occupiedByAgents.contains(nodeId)) {
+                    freeNeighbors.add(nodeId);
+                }
+            }
+
+            if (freeNeighbors.isEmpty()) return;
+            String next = freeNeighbors.get(new Random().nextInt(freeNeighbors.size()));
+            for (var nodeObs : obs) {
+                if (nodeObs.getLeft().getLocationId().equals(next)) {
+                    me.moveTo(nodeObs.getLeft());
+                    return;
+                }
+            }
             return;
         }
 
-        // Pas de stench connu → se déplacer vers un nœud voisin libre aléatoire
-        var obs = me.observe();
-        if (obs == null || obs.isEmpty()) return;
-
-        // Éviter les nœuds occupés par d'autres agents
-        Set<String> occupiedByAgents = new HashSet<>();
-        for (var nodeObs : obs) {
-            for (var o : nodeObs.getRight()) {
-                if (o.getLeft() == Observation.AGENTNAME) {
-                    occupiedByAgents.add(nodeObs.getLeft().getLocationId());
-                }
+        // On sait où est le golem → chercher un voisin libre du golem
+        List<String> golemNeighbors = getNeighbors(lastKnownStenchNode);
+        
+        // Nœuds déjà réclamés par d'autres
+        Set<String> takenByOthers = new HashSet<>();
+        for (Map.Entry<String, String> e : claims.entrySet()) {
+            if (!e.getKey().equals(myName)) {
+                takenByOthers.add(e.getValue());
             }
         }
 
-        List<String> freeNeighbors = new ArrayList<>();
-        for (var nodeObs : obs) {
-            String nodeId = nodeObs.getLeft().getLocationId();
-            if (!nodeId.equals(cur.getLocationId()) && !occupiedByAgents.contains(nodeId)) {
-                freeNeighbors.add(nodeId);
+        // Trouver le voisin libre le plus proche
+        MapRepresentation map = ((ExploreCoopAgent) me).myMap;
+        String bestTarget = null;
+        int bestDist = Integer.MAX_VALUE;
+
+        for (String neighbor : golemNeighbors) {
+            if (takenByOthers.contains(neighbor)) continue;
+            if (map == null) continue;
+            
+            boolean exists = map.getSerializableGraph().getAllNodes().stream()
+                .anyMatch(n -> n.getNodeId().equals(neighbor));
+            if (!exists) continue;
+
+            List<String> path = map.getShortestPath(cur.getLocationId(), neighbor);
+            int dist = (path == null) ? Integer.MAX_VALUE : path.size();
+            if (dist < bestDist) {
+                bestDist = dist;
+                bestTarget = neighbor;
             }
         }
 
-        if (freeNeighbors.isEmpty()) return;
-
-        // Choisir aléatoirement parmi les voisins libres
-        String next = freeNeighbors.get(new Random().nextInt(freeNeighbors.size()));
-        for (var nodeObs : obs) {
-            if (nodeObs.getLeft().getLocationId().equals(next)) {
-                me.moveTo(nodeObs.getLeft());
-                return;
-            }
+        if (bestTarget != null) {
+            System.out.println("[" + myName + "] → voisin libre du golem : " + bestTarget);
+            myClaimedNode = bestTarget;
+            broadcastClaim(me, bestTarget);
+            moveToward(me, bestTarget);
+        } else {
+            // Tous les voisins pris → se rapprocher quand même du golem
+            System.out.println("[" + myName + "] Tous voisins pris → rapprochement du golem");
+            moveToward(me, lastKnownStenchNode);
         }
     }
 
@@ -725,7 +790,8 @@ public class HuntBehaviour extends TickerBehaviour {
     }
 
     private void broadcastClaim(AbstractDedaleAgent me, String nodeId) {
-        String content = "CLAIM:" + myName + ":" + nodeId;
+    	String golemPart = lastKnownStenchNode != null ? lastKnownStenchNode : "";
+        String content = "CLAIM:" + myName + ":" + nodeId + ":" + golemPart;
         for (String name : allAgentNames) {
             ACLMessage acl = new ACLMessage(ACLMessage.INFORM);
             acl.setSender(me.getAID());
@@ -748,9 +814,16 @@ public class HuntBehaviour extends TickerBehaviour {
         while ((msg = me.receive(mt)) != null) {
             String content = msg.getContent();
             if (content == null || !content.startsWith("CLAIM:")) continue;
-            String[] parts = content.substring("CLAIM:".length()).split(":", 2);
-            if (parts.length == 2) {
+            
+            String[] parts = content.substring("CLAIM:".length()).split(":", 3);
+            if (parts.length >= 2) {
                 claims.put(parts[0], parts[1]);
+            }
+            // Mettre à jour la position connue du golem
+            if (parts.length >= 3 && !parts[2].isEmpty()) {
+                lastKnownStenchNode = parts[2];
+                System.out.println("[" + myName + "] Golem signalé en " 
+                    + lastKnownStenchNode + " par " + parts[0]);
             }
         }
     }
