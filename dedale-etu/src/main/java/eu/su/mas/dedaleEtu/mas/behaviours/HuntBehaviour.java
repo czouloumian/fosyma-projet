@@ -635,15 +635,42 @@ public class HuntBehaviour extends TickerBehaviour {
 
     private void navigateTowardGolem(AbstractDedaleAgent me, Location cur) {
         if (lastKnownStenchNode != null) {
-            System.out.println("[" + myName + "] No stench — moving toward: " + lastKnownStenchNode);
+            System.out.println("[" + myName + "] No stench — moving toward last known: " + lastKnownStenchNode);
             moveToward(me, lastKnownStenchNode);
-        } else {
-            var obs = me.observe();
-            if (obs == null || obs.isEmpty()) return;
-            obs.stream()
-                .filter(o -> !o.getLeft().getLocationId().equals(cur.getLocationId()))
-                .findFirst()
-                .ifPresent(o -> me.moveTo(o.getLeft()));
+            return;
+        }
+
+        // Pas de stench connu → se déplacer vers un nœud voisin libre aléatoire
+        var obs = me.observe();
+        if (obs == null || obs.isEmpty()) return;
+
+        // Éviter les nœuds occupés par d'autres agents
+        Set<String> occupiedByAgents = new HashSet<>();
+        for (var nodeObs : obs) {
+            for (var o : nodeObs.getRight()) {
+                if (o.getLeft() == Observation.AGENTNAME) {
+                    occupiedByAgents.add(nodeObs.getLeft().getLocationId());
+                }
+            }
+        }
+
+        List<String> freeNeighbors = new ArrayList<>();
+        for (var nodeObs : obs) {
+            String nodeId = nodeObs.getLeft().getLocationId();
+            if (!nodeId.equals(cur.getLocationId()) && !occupiedByAgents.contains(nodeId)) {
+                freeNeighbors.add(nodeId);
+            }
+        }
+
+        if (freeNeighbors.isEmpty()) return;
+
+        // Choisir aléatoirement parmi les voisins libres
+        String next = freeNeighbors.get(new Random().nextInt(freeNeighbors.size()));
+        for (var nodeObs : obs) {
+            if (nodeObs.getLeft().getLocationId().equals(next)) {
+                me.moveTo(nodeObs.getLeft());
+                return;
+            }
         }
     }
 
