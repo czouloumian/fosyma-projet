@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Comparator;
 
 import dataStructures.serializableGraph.SerializableSimpleGraph;
 import dataStructures.tuple.Couple;
@@ -53,6 +54,8 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 	private MapRepresentation myMap;
 
 	private List<String> list_agentNames;
+	
+	
 
 /**
  * 
@@ -135,8 +138,10 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 			if (!this.myMap.hasOpenNode()){
 				//Explo finished
 				finished=true;
-				System.out.println(this.myAgent.getLocalName()+" - Exploration successufully done, behaviour removed.");
-				myAgent.addBehaviour(new HuntBehaviour((AbstractDedaleAgent) myAgent, list_agentNames)); 
+				String center = computeCentralNode(this.myMap);
+			    ((ExploreCoopAgent) this.myAgent).meetingPoint = center;
+			    System.out.println("[" + myAgent.getLocalName() 
+			        + "] Exploration terminée, RDV en " + center);
 			}else{
 				//4) select next move.
 				//4.1 If there exist one open node directly reachable, go for it,
@@ -231,6 +236,14 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 	@Override
 	public boolean done() {
 		return finished;
+	}
+	
+	private String computeCentralNode(MapRepresentation map) {
+	    var allNodes = map.getSerializableGraph().getAllNodes();
+	    return allNodes.stream()
+	        .map(n -> n.getNodeId())
+	        .min(Comparator.naturalOrder())
+	        .orElse(null);
 	}
 
 }

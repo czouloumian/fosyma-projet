@@ -80,10 +80,10 @@ public final class ConfigurationFile {
 	 */
 	//public static String INSTANCE_TOPOLOGY=null;
 	
-	//public static String INSTANCE_TOPOLOGY="resources/topology/map2020-topologyExam1-graph.dgs";
+	public static String INSTANCE_TOPOLOGY="resources/topology/map2020-topologyExam1-graph.dgs";
 	//public static String INSTANCE_TOPOLOGY="resources/topology/HouatTopology";
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2025-topologyExam";
-	public static String INSTANCE_TOPOLOGY="resources/topology/map2021-topologyExam1-graph.dgs";
+	//public static String INSTANCE_TOPOLOGY="resources/topology/map2021-topologyExam1-graph.dgs";
 	//public static String INSTANCE_TOPOLOGY="resources/interlocking/mapInterlocking2-topology";
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2023-topologyExam.dgs";
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2020-topologyExam1-graph.dgs";
