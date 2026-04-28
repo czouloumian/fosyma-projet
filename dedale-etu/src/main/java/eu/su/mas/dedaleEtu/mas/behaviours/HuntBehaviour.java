@@ -54,6 +54,8 @@ public class HuntBehaviour extends TickerBehaviour {
     int lastTimeSeen = 0;
     private static final int RELAY_LIMIT = 5;
     
+    private boolean blockedMessageSent = false;
+    
     // Constructeur à 3 arguments (utilisé en interne)
     public HuntBehaviour(ExploreCoopAgent agent, List<String> allAgentNames, String coordinatorName) {
         super(agent, Constants.stopTimeHunt);
@@ -107,10 +109,10 @@ public class HuntBehaviour extends TickerBehaviour {
             addBlockedGolemZone(golemNode);
             return;
         }
-        if (golemSightCount > 0) {
+        /*if (golemSightCount > 0) {
             pauseExecution(Constants.stopTimeHunt);
             return;
-        }
+        }*/
         
         processMessages(me);
         
@@ -159,7 +161,6 @@ public class HuntBehaviour extends TickerBehaviour {
         MapRepresentation map = coop.myMap;
         if (map == null) return;
 
-        // Détection de stagnation : aucun mouvement pendant plusieurs ticks
         if (cur.getLocationId().equals(lastPatrolPos)) {
             patrolStuckCount++;
         } else {
@@ -168,16 +169,14 @@ public class HuntBehaviour extends TickerBehaviour {
             lastPatrolPos = cur.getLocationId();
         }
 
-        boolean reallyStuck = patrolStuckCount > 5;  // bloqué trop longtemps
+        // Bloqué si trop de ticks sans bouger OU trop d'échecs de déplacement
+        boolean reallyStuck = (patrolStuckCount > 12) || (failedMoveCount > 8);
 
-        // Changer de cible si on a atteint l'ancienne, ou si bloqué
         if (myTargetNode == null || cur.getLocationId().equals(myTargetNode) || reallyStuck) {
-            if (reallyStuck) {
-                broadcastGolemBlocked(me);
-            }
             patrolStuckCount = 0;
+            failedMoveCount = 0;
             String target = pickFarNode(map, cur.getLocationId());
-            if (target != null && !target.equals(myTargetNode)) {
+            if (target != null) {
                 myTargetNode = target;
                 System.out.println("[" + myName + "] Nouvelle cible patrouille : " + myTargetNode);
             }
@@ -300,7 +299,10 @@ public class HuntBehaviour extends TickerBehaviour {
                 }
                 blockedGolems.addAll(zone);
             }
-            broadcastGolemBlocked(me);
+            if (!blockedMessageSent) {
+                broadcastGolemBlocked(me);
+                blockedMessageSent = true;
+            }
         }
         pauseExecution(Constants.stopTimeHunt);
     }
@@ -378,14 +380,14 @@ public class HuntBehaviour extends TickerBehaviour {
                     addBlockedGolemZone(golem);
                     System.out.println("[" + myName + "] Golem " + golem + " est bloqué (zone ajoutée)");
                 }
-                if (state != HuntState.BLOCKING && state != HuntState.PATROL) {
+                /*if (state != HuntState.BLOCKING && state != HuntState.PATROL) {
                     state = HuntState.PATROL;
                     golemNode = null;
                     myTargetNode = null;
                     myClaimedNode = null;
                     lastKnownStenchNode = null;
                     claims.clear();
-                }
+                }*/
             }
         }
     }
@@ -645,17 +647,22 @@ public class HuntBehaviour extends TickerBehaviour {
         if (!targetExists) return false;
         List<String> path = map.getShortestPath(cur.getLocationId(), targetId);
         if (path == null || path.isEmpty()) return false;
-        String nextNode = path.get(0);
+        
         var obs = me.observe();
         if (obs == null) return false;
         
-        if (agentPositions.containsValue(nextNode) && !nextNode.equals(cur.getLocationId())) {
-    	    return false;  
-    	}
-        
-        for (var nodeObs : obs) {
-            if (nodeObs.getLeft().getLocationId().equals(nextNode)) {
-                return me.moveTo(nodeObs.getLeft());
+        // Parcourir le chemin jusqu'à trouver un nœud libre
+        for (String nextNode : path) {
+            // Ne pas essayer de se déplacer sur un nœud occupé par un autre agent (sauf si c'est la cible finale)
+            if (agentPositions.containsValue(nextNode) && !nextNode.equals(targetId)) {
+                continue;
+            }
+            for (var nodeObs : obs) {
+                if (nodeObs.getLeft().getLocationId().equals(nextNode)) {
+                    boolean success = me.moveTo(nodeObs.getLeft());
+                    if (success) return true;
+                    else break; // ce nœud est bloqué, essayer le suivant
+                }
             }
         }
         return false;
