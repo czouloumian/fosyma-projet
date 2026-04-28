@@ -486,7 +486,7 @@ public class HuntBehaviour extends TickerBehaviour {
         var allNodes = map.getSerializableGraph().getAllNodes();
         if (allNodes.isEmpty()) return null;
 
-        // Récupérer tous les nœuds accessibles avec leur distance
+        // 1. Ne garder que les nœuds accessibles (shortestPath non null)
         List<Map.Entry<String, Integer>> reachable = new ArrayList<>();
         for (var node : allNodes) {
             String nodeId = node.getNodeId();
@@ -498,11 +498,11 @@ public class HuntBehaviour extends TickerBehaviour {
         }
         if (reachable.isEmpty()) return null;
 
-        // Distance maximale
+        // 2. Distance maximale
         int maxDist = reachable.stream().max(Map.Entry.comparingByValue()).get().getValue();
         int threshold = Math.max(2, (int)(maxDist * 0.7)); // 70% de la distance max
 
-        // Nœuds éloignés
+        // 3. Nœuds éloignés (distance >= threshold)
         List<String> farNodes = reachable.stream()
                 .filter(e -> e.getValue() >= threshold)
                 .map(Map.Entry::getKey)
@@ -512,6 +512,7 @@ public class HuntBehaviour extends TickerBehaviour {
             farNodes = reachable.stream().map(Map.Entry::getKey).collect(Collectors.toList());
         }
 
+        // 4. Choix aléatoire
         Random rand = new Random();
         return farNodes.get(rand.nextInt(farNodes.size()));
     }

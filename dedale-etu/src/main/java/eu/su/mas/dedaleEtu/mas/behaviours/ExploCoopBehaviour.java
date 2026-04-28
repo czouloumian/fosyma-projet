@@ -155,10 +155,10 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 			}
 
 			//3) while openNodes is not empty, continues.
-			boolean forceEnd = stuckCounter > 15;
+			boolean forceEnd = stuckCounter > 30;
 			boolean naturalEnd = !this.myMap.hasOpenNode();
 
-			if (naturalEnd || forceEnd) {
+			if (naturalEnd) {
 			    finished = true;
 			    ((ExploreCoopAgent) this.myAgent).huntStarted = true;
 			    ((ExploreCoopAgent) this.myAgent).explorationDone = true;
@@ -239,6 +239,10 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				}
 
 				//((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(nextNodeId));
+				
+				if (nextNodeId != null && !nextNodeId.equals(lastPosition)) {
+				    stuckCounter = 0;
+				}
 				
 				boolean success = ((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(nextNodeId));
 
