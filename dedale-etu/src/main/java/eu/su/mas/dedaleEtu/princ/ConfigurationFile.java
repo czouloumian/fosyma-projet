@@ -164,6 +164,7 @@ public final class ConfigurationFile {
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo2.json";
 	public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo2.json";
+	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo3.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1tanker.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1human.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1tanker-1collect.json";

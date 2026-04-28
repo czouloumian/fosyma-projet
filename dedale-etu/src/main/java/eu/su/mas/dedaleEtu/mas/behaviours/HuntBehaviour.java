@@ -159,7 +159,7 @@ public class HuntBehaviour extends TickerBehaviour {
         MapRepresentation map = coop.myMap;
         if (map == null) return;
 
-        // Détection de stagnation : aucun mouvement pendant plusieurs ticks
+        // Détection de stagnation
         if (cur.getLocationId().equals(lastPatrolPos)) {
             patrolStuckCount++;
         } else {
@@ -170,11 +170,8 @@ public class HuntBehaviour extends TickerBehaviour {
 
         boolean reallyStuck = patrolStuckCount > 5;  // bloqué trop longtemps
 
-        // Changer de cible si on a atteint l'ancienne, ou si bloqué
+        // Changer de cible si nécessaire (sans broadcast)
         if (myTargetNode == null || cur.getLocationId().equals(myTargetNode) || reallyStuck) {
-            if (reallyStuck) {
-                broadcastGolemBlocked(me);
-            }
             patrolStuckCount = 0;
             String target = pickFarNode(map, cur.getLocationId());
             if (target != null && !target.equals(myTargetNode)) {
@@ -275,9 +272,8 @@ public class HuntBehaviour extends TickerBehaviour {
             }
         }
         
-        if (!wumpusSeenThisTick) {
-            state = HuntState.PATROL;
-        } else {
+        // Si le golem est encore présent, on met à jour la zone bloquée
+        if (wumpusSeenThisTick) {
             blockedGolems.add(golemNode);
             if (coop.myMap != null) {
                 Set<String> zone = new HashSet<>();
@@ -368,8 +364,8 @@ public class HuntBehaviour extends TickerBehaviour {
         }
         
         MessageTemplate mtBlocked = MessageTemplate.and(
-            MessageTemplate.MatchPerformative(ACLMessage.INFORM),
-            MessageTemplate.MatchOntology("GOLEM-BLOCKED"));
+                MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+                MessageTemplate.MatchOntology("GOLEM-BLOCKED"));
         while ((msg = me.receive(mtBlocked)) != null) {
             String content = msg.getContent();
             if (content != null && !content.isEmpty()) {
@@ -377,14 +373,6 @@ public class HuntBehaviour extends TickerBehaviour {
                 for (String golem : golems) {
                     addBlockedGolemZone(golem);
                     System.out.println("[" + myName + "] Golem " + golem + " est bloqué (zone ajoutée)");
-                }
-                if (state != HuntState.BLOCKING && state != HuntState.PATROL) {
-                    state = HuntState.PATROL;
-                    golemNode = null;
-                    myTargetNode = null;
-                    myClaimedNode = null;
-                    lastKnownStenchNode = null;
-                    claims.clear();
                 }
             }
         }
@@ -498,24 +486,34 @@ public class HuntBehaviour extends TickerBehaviour {
         var allNodes = map.getSerializableGraph().getAllNodes();
         if (allNodes.isEmpty()) return null;
 
-        // Récupérer les distances vers tous les autres nœuds
-        List<Map.Entry<String, Integer>> distances = new ArrayList<>();
+        // Récupérer tous les nœuds accessibles avec leur distance
+        List<Map.Entry<String, Integer>> reachable = new ArrayList<>();
         for (var node : allNodes) {
             String nodeId = node.getNodeId();
             if (nodeId.equals(currentId)) continue;
             List<String> path = map.getShortestPath(currentId, nodeId);
-            int dist = (path == null) ? 0 : path.size();
-            distances.add(new AbstractMap.SimpleEntry<>(nodeId, dist));
+            if (path != null) {
+                reachable.add(new AbstractMap.SimpleEntry<>(nodeId, path.size()));
+            }
         }
-        if (distances.isEmpty()) return null;
+        if (reachable.isEmpty()) return null;
 
-        // Trier par distance décroissante
-        distances.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
+        // Distance maximale
+        int maxDist = reachable.stream().max(Map.Entry.comparingByValue()).get().getValue();
+        int threshold = Math.max(2, (int)(maxDist * 0.7)); // 70% de la distance max
 
-        // Choisir aléatoirement parmi les 5 nœuds les plus éloignés
-        int top = Math.min(5, distances.size());
-        int choice = new Random().nextInt(top);
-        return distances.get(choice).getKey();
+        // Nœuds éloignés
+        List<String> farNodes = reachable.stream()
+                .filter(e -> e.getValue() >= threshold)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        if (farNodes.isEmpty()) {
+            farNodes = reachable.stream().map(Map.Entry::getKey).collect(Collectors.toList());
+        }
+
+        Random rand = new Random();
+        return farNodes.get(rand.nextInt(farNodes.size()));
     }
     
     private String pickTarget(AbstractDedaleAgent me, Location cur, List<String> stenchNodes) {
