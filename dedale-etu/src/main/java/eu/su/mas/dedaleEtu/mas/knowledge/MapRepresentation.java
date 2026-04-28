@@ -385,6 +385,23 @@ public class MapRepresentation implements Serializable {
 				.filter(n -> MapAttribute.open.toString().equals(n.getAttribute("ui.class")))
 				.findAny()).isPresent();
 	}
+	
+	
+	public synchronized List<String> getNeighbors(String nodeId) {
+        List<String> neighbors = new ArrayList<>();
+        Node node = this.g.getNode(nodeId);
+        if (node != null) {
+            Iterator<Edge> edgeIterator = node.edges().iterator();
+            while (edgeIterator.hasNext()) {
+                Edge e = edgeIterator.next();
+                Node opposite = e.getOpposite(node);
+                if (opposite != null) {
+                    neighbors.add(opposite.getId());
+                }
+            }
+        }
+        return neighbors;
+    }
 
 
 

@@ -161,6 +161,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 			if (naturalEnd || forceEnd) {
 			    finished = true;
 			    ((ExploreCoopAgent) this.myAgent).huntStarted = true;
+			    ((ExploreCoopAgent) this.myAgent).explorationDone = true;
 			    String center = computeCentralNode(this.myMap);
 			    ((ExploreCoopAgent) this.myAgent).meetingPoint = center;
 			    System.out.println("[" + myAgent.getLocalName()

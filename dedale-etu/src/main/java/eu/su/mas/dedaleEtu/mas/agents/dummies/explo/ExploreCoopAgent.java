@@ -45,6 +45,7 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 	//private MapRepresentation myMap;
 	public MapRepresentation myMap = null;
 	public boolean huntStarted = false;
+	public boolean explorationDone = false;
 	public String meetingPoint = null;
 	
 
