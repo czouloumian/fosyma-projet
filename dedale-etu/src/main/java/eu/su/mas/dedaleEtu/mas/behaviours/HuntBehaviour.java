@@ -54,7 +54,6 @@ public class HuntBehaviour extends TickerBehaviour {
     int lastTimeSeen = 0;
     private static final int RELAY_LIMIT = 5;
     
-    // Constructeur à 3 arguments (utilisé en interne)
     public HuntBehaviour(ExploreCoopAgent agent, List<String> allAgentNames, String coordinatorName) {
         super(agent, Constants.stopTimeHunt);
         this.allAgentNames = allAgentNames;
@@ -69,7 +68,6 @@ public class HuntBehaviour extends TickerBehaviour {
         System.out.println("[" + myName + "] HuntBehaviour initialisé (coordinator=" + coordinatorName + ")");
     }
 
-    // Constructeur à 2 arguments pour compatibilité avec l'ancien appel
     public HuntBehaviour(ExploreCoopAgent agent, List<String> allAgentNames) {
         this(agent, allAgentNames, agent.getLocalName());
     }
@@ -79,11 +77,11 @@ public class HuntBehaviour extends TickerBehaviour {
         AbstractDedaleAgent me = (AbstractDedaleAgent) this.myAgent;
         ExploreCoopAgent coop = (ExploreCoopAgent) me;
         
-        // Attendre la fin de l'exploration
+        // On attend la fin de l'exploration
         if (coop.meetingPoint == null) return;
         if (coop.myMap == null) return;
         
-        // Affichage d'état
+        // Affichage d'état actuel de l'agent
         if (state == HuntState.PATROL) 
             System.out.println("                                            " + me.getLocalName() + " EST EN PATROUILLE");
         if (state == HuntState.HUNTING) 
@@ -152,6 +150,7 @@ public class HuntBehaviour extends TickerBehaviour {
     }
 
     // ==================== PATROL ====================
+    
     private void followerPatrol(AbstractDedaleAgent me) {
         Location cur = me.getCurrentPosition();
         if (cur == null) return;
@@ -170,7 +169,7 @@ public class HuntBehaviour extends TickerBehaviour {
 
         boolean reallyStuck = patrolStuckCount > 5;  // bloqué trop longtemps
 
-        // Changer de cible si nécessaire (sans broadcast)
+        // Changer de cible si nécessaire 
         if (myTargetNode == null || cur.getLocationId().equals(myTargetNode) || reallyStuck) {
             patrolStuckCount = 0;
             String target = pickFarNode(map, cur.getLocationId());
@@ -192,6 +191,7 @@ public class HuntBehaviour extends TickerBehaviour {
     }
 
     // ==================== DETECTION ====================
+    
     private void updateGolemPosition(AbstractDedaleAgent me) {
         Location cur = me.getCurrentPosition();
         if (cur == null) return;
@@ -254,6 +254,7 @@ public class HuntBehaviour extends TickerBehaviour {
     }
     
     // ==================== BLOCKING ====================
+    
     private void blocking(AbstractDedaleAgent me, String golemNode) {
         Location cur = me.getCurrentPosition();
         if (cur == null) return;
@@ -302,6 +303,7 @@ public class HuntBehaviour extends TickerBehaviour {
     }
     
     // ==================== MESSAGES ====================
+    
     private void processMessages(AbstractDedaleAgent me) {
         ExploreCoopAgent coop = (ExploreCoopAgent) me;
         MessageTemplate mtGolem = MessageTemplate.and(
@@ -482,11 +484,12 @@ public class HuntBehaviour extends TickerBehaviour {
     }
     
     // ==================== UTILITAIRES ====================
+    
     private String pickFarNode(MapRepresentation map, String currentId) {
         var allNodes = map.getSerializableGraph().getAllNodes();
         if (allNodes.isEmpty()) return null;
 
-        // 1. Ne garder que les nœuds accessibles (shortestPath non null)
+        // 1. Ne garder que les noeuds accessibles 
         List<Map.Entry<String, Integer>> reachable = new ArrayList<>();
         for (var node : allNodes) {
             String nodeId = node.getNodeId();
@@ -500,9 +503,9 @@ public class HuntBehaviour extends TickerBehaviour {
 
         // 2. Distance maximale
         int maxDist = reachable.stream().max(Map.Entry.comparingByValue()).get().getValue();
-        int threshold = Math.max(2, (int)(maxDist * 0.7)); // 70% de la distance max
+        int threshold = Math.max(2, (int)(maxDist * 0.7));
 
-        // 3. Nœuds éloignés (distance >= threshold)
+        // 3. Noeuds éloignés 
         List<String> farNodes = reachable.stream()
                 .filter(e -> e.getValue() >= threshold)
                 .map(Map.Entry::getKey)

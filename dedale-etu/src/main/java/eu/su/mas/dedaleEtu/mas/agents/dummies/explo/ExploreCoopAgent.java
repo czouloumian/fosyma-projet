@@ -64,21 +64,11 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 		
 		List<String> list_agentNames=new ArrayList<String>();
 		
-		/*System.out.println("JE SUIS DANS EXPLORE COOP AGENT MA LISTE D ARGUMENTS EST : ");
-		for (Object a : args) { 
-			System.out.println("Je suis dans le for "+a);}*/
 		
 		if(args.length==0){
 			System.err.println("Error while creating the agent, names of agent to contact expected");
 			System.exit(-1);
 		}else{
-			/*System.out.println("JE SUIS DANS LE ELSE et agrs length = "+args.length);
-			int i=2;// WARNING YOU SHOULD ALWAYS START AT 2. This will be corrected in the next release.
-			while (i<args.length) {
-				System.out.println("WHILE ET args[i] = " +args[i]+ " string args "+((String)args[i]));
-				list_agentNames.add((String)args[i]);
-				i++;
-			}*/
 			List<String> userParams=((EntityCharacteristics)args[0]).getUserParameters();
 			if (userParams!=null) {
 				list_agentNames.addAll(userParams);
@@ -86,10 +76,6 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 			}
 		}
 		
-		/*System.out.println("LISTE AGENTS : ");
-		
-		for (Object a : list_agentNames) { 
-			System.out.println("Je suis dans le for agents "+a);}*/
 		
 		List<Behaviour> lb=new ArrayList<Behaviour>();
 		
@@ -100,16 +86,6 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 		 * ADD the behaviours of the Dummy Moving Agent
 		 * 
 		 ************************************************/
-		
-		//this.myMap = new MapRepresentation(this.getLocalName());
-	
-		
-		//lb.add(new ExploCoopBehaviour(this,this.myMap,list_agentNames));
-		
-
-		//lb.add(new ReceiveMapBehaviour((Agent) this, this.myMap));)
-		
-		//lb.add(new ReceiveMapBehaviour(this, this.myMap));
 		
 		
 		lb.add(new ExploCoopBehaviour(this, this.myMap, list_agentNames));

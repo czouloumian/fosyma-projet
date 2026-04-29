@@ -145,17 +145,13 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				//the node may exist, but not necessarily the edge
 				if (myPosition.getLocationId()!=accessibleNode.getLocationId()) {
 					this.myMap.addEdge(myPosition.getLocationId(), accessibleNode.getLocationId());
-					//if (nextNodeId==null && isNewNode) nextNodeId=accessibleNode.getLocationId();
-					if (nextNodeId==null && isNewNode 
-						    && !occupiedNodes.contains(accessibleNode.getLocationId())) {
+					if (nextNodeId==null && isNewNode && !occupiedNodes.contains(accessibleNode.getLocationId())) {
 
 						    nextNodeId = accessibleNode.getLocationId();
 					}
 				}
 			}
 
-			//3) while openNodes is not empty, continues.
-			boolean forceEnd = stuckCounter > 30;
 			boolean naturalEnd = !this.myMap.hasOpenNode();
 
 			if (naturalEnd) {
@@ -166,7 +162,6 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 			    ((ExploreCoopAgent) this.myAgent).meetingPoint = center;
 			    System.out.println("[" + myAgent.getLocalName()
 			        + "] Fin exploration ("
-			        + (forceEnd ? "timeout stuck=" + stuckCounter : "naturelle")
 			        + ") | RDV en " + center
 			        + " | noeuds total : " + this.myMap.getSerializableGraph().getAllNodes().size());
 			    return;
@@ -174,12 +169,6 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				//4) select next move.
 				//4.1 If there exist one open node directly reachable, go for it,
 				//	 otherwise choose one from the openNode list, compute the shortestPath and go for it
-				/*if (nextNodeId==null){
-					//no directly accessible openNode
-					//chose one, compute the path and take the first step.
-					nextNodeId=this.myMap.getShortestPathToClosestOpenNode(myPosition.getLocationId()).get(0);//getShortestPath(myPosition,this.openNodes.get(0)).get(0);
-					//System.out.println(this.myAgent.getLocalName()+"-- list= "+this.myMap.getOpenNodes()+"| nextNode: "+nextNode);
-				}*/
 				if (nextNodeId == null) {
 				    List<String> path = this.myMap.getShortestPathToClosestOpenNode(myPosition.getLocationId());
 
@@ -208,9 +197,6 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				        }
 				    }
 				}
-				else {
-					//System.out.println("nextNode notNUll - "+this.myAgent.getLocalName()+"-- list= "+this.myMap.getOpenNodes()+"\n -- nextNode: "+nextNode);
-				}
 				
 				//5) At each time step, the agent check if he received a graph from a teammate. 	
 				// If it was written properly, this sharing action should be in a dedicated behaviour set.
@@ -237,8 +223,6 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 					 ack.addReceiver(msgReceived.getSender());
 					 this.myAgent.send(ack);
 				}
-
-				//((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(nextNodeId));
 				
 				if (nextNodeId != null && !nextNodeId.equals(lastPosition)) {
 				    stuckCounter = 0;
