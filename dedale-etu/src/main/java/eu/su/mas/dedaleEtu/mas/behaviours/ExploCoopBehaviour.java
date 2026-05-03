@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Comparator;
+import java.util.ArrayList;
 
 import dataStructures.serializableGraph.SerializableSimpleGraph;
 import dataStructures.tuple.Couple;
@@ -17,7 +18,6 @@ import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import eu.su.mas.dedaleEtu.mas.behaviours.ShareMapBehaviourBest;
-import eu.su.mas.dedaleEtu.mas.behaviours.HuntBehaviour;
 import eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent;
 
 import jade.core.behaviours.SimpleBehaviour;
@@ -25,241 +25,267 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 
-
 /**
- * <pre>
- * This behaviour allows an agent to explore the environment and learn the associated topological map.
- * The algorithm is a pseudo - DFS computationally consuming because its not optimised at all.
- * 
- * When all the nodes around him are visited, the agent randomly select an open node and go there to restart its dfs. 
- * This (non optimal) behaviour is done until all nodes are explored. 
- * 
- * Warning, this behaviour does not save the content of visited nodes, only the topology.
- * Warning, the sub-behaviour ShareMap periodically share the whole map
- * </pre>
- * @author hc
- *
+ * Exploration coopérative avec détection de blocage et choix robuste du point de rendez-vous.
  */
 public class ExploCoopBehaviour extends SimpleBehaviour {
 
-	private static final long serialVersionUID = 8567689731496787661L;
+    private static final long serialVersionUID = 8567689731496787661L;
 
-	private boolean finished = false;
-	
-	private boolean initialized = false;
+    private boolean finished = false;
+    private boolean initialized = false;
 
-	/**
-	 * Current knowledge of the agent regarding the environment
-	 */
-	private MapRepresentation myMap;
+    private MapRepresentation myMap;
+    private List<String> list_agentNames;
 
-	private List<String> list_agentNames;
-	
-	private int stuckCounter = 0;
-	private String lastPosition = null;
-	private String beforeLastPosition = null;
-	
-	
+    private int stuckCounter = 0;
+    private String lastPosition = null;
+    private String beforeLastPosition = null;
 
-/**
- * 
- * @param myagent reference to the agent we are adding this behaviour to
- * @param myMap known map of the world the agent is living in
- * @param agentNames name of the agents to share the map with
- */
-	public ExploCoopBehaviour(final AbstractDedaleAgent myagent, MapRepresentation myMap,List<String> agentNames) {
-		super(myagent);
-		this.myMap=myMap;
-		this.list_agentNames=agentNames;
-		
-		System.out.println("[" + myagent.getLocalName() + "] ExploCoopBehaviour créé"
-		        + " | list_agentNames = " + agentNames);
-	}
+    // Suivi des nœuds fermés (visités) pour le point de rendez-vous
+    private Set<String> closedNodes = new HashSet<>();
 
-	@Override
-	public void action() {
-		System.out.println("[" + myAgent.getLocalName() 
-	    + "] ExploCoop action | huntStarted=" + ((ExploreCoopAgent) myAgent).huntStarted
-	    + " | meetingPoint=" + ((ExploreCoopAgent) myAgent).meetingPoint
-	    + " | openNodes=" + (this.myMap != null ? this.myMap.getOpenNodes().size() : "null")
-	    + " | stuckCounter=" + stuckCounter);
-		
-		if (((ExploreCoopAgent) this.myAgent).huntStarted) {
-		    finished = true;
-		    return;
-		}
+    // Variables pour la détection de blocage sur la cible courante
+    private String currentTarget = null;
+    private int blockedCounter = 0;
+    private int lastKnownDistance = Integer.MAX_VALUE;
 
-		if(!initialized) {
-			initialized = true;
-			this.myMap= new MapRepresentation(this.myAgent.getLocalName());
-			((ExploreCoopAgent) this.myAgent).myMap = this.myMap;
-			this.myAgent.addBehaviour(new ShareMapBehaviourBest(this.myAgent,500,this.myMap,list_agentNames));
-		}
+    public ExploCoopBehaviour(final AbstractDedaleAgent myagent, MapRepresentation myMap, List<String> agentNames) {
+        super(myagent);
+        this.myMap = myMap;
+        this.list_agentNames = agentNames;
+        System.out.println("[" + myagent.getLocalName() + "] ExploCoopBehaviour créé | list_agentNames = " + agentNames);
+    }
 
-		//0) Retrieve the current position
-		Location myPosition=((AbstractDedaleAgent)this.myAgent).getCurrentPosition();
+    @Override
+    public void action() {
+        System.out.println("[" + myAgent.getLocalName() 
+            + "] ExploCoop action | huntStarted=" + ((ExploreCoopAgent) myAgent).huntStarted
+            + " | meetingPoint=" + ((ExploreCoopAgent) myAgent).meetingPoint
+            + " | openNodes=" + (this.myMap != null ? this.myMap.getOpenNodes().size() : "null")
+            + " | stuckCounter=" + stuckCounter
+            + " | target=" + currentTarget);
 
-		if (myPosition!=null){
-			String currentPos = myPosition.getLocationId();
-		    
-		    if (currentPos.equals(lastPosition) || currentPos.equals(beforeLastPosition)) {
-		        stuckCounter++;
-		    } else {
-		        stuckCounter = 0;
-		    }
-		    
-		    beforeLastPosition = lastPosition;
-		    lastPosition = currentPos;
-		    
-			//List of observable from the agent's current position
-			List<Couple<Location,List<Couple<Observation,String>>>> lobs=((AbstractDedaleAgent)this.myAgent).observe();//myPosition
-			
-			Set<String> occupiedNodes = new HashSet<>();
+        if (((ExploreCoopAgent) this.myAgent).huntStarted) {
+            finished = true;
+            return;
+        }
 
-			for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
-			    for (Couple<Observation, String> attr : obs.getRight()) {
-			        if (attr.getLeft() == Observation.AGENTNAME) {
-			            occupiedNodes.add(obs.getLeft().getLocationId());
-			        }
-			    }
-			}
+        if (!initialized) {
+            initialized = true;
+            this.myMap = new MapRepresentation(this.myAgent.getLocalName());
+            ((ExploreCoopAgent) this.myAgent).myMap = this.myMap;
+            this.myAgent.addBehaviour(new ShareMapBehaviourBest(this.myAgent, 500, this.myMap, list_agentNames));
+        }
 
-			/**
-			 * Just added here to let you see what the agent is doing, otherwise he will be too quick
-			 */
-			try {
-				this.myAgent.doWait(1000);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+        Location myPosition = ((AbstractDedaleAgent) this.myAgent).getCurrentPosition();
+        if (myPosition == null) return;
 
-			//1) remove the current node from openlist and add it to closedNodes.
-			this.myMap.addNode(myPosition.getLocationId(), MapAttribute.closed);
+        String currentPos = myPosition.getLocationId();
 
-			//2) get the surrounding nodes and, if not in closedNodes, add them to open nodes.
-			String nextNodeId=null;
-			Iterator<Couple<Location, List<Couple<Observation, String>>>> iter=lobs.iterator();
-			while(iter.hasNext()){
-				Location accessibleNode=iter.next().getLeft();
-				boolean isNewNode=this.myMap.addNewNode(accessibleNode.getLocationId());
-				//the node may exist, but not necessarily the edge
-				if (myPosition.getLocationId()!=accessibleNode.getLocationId()) {
-					this.myMap.addEdge(myPosition.getLocationId(), accessibleNode.getLocationId());
-					if (nextNodeId==null && isNewNode && !occupiedNodes.contains(accessibleNode.getLocationId())) {
+        if (currentPos.equals(lastPosition) || currentPos.equals(beforeLastPosition)) {
+            stuckCounter++;
+        } else {
+            stuckCounter = 0;
+        }
+        beforeLastPosition = lastPosition;
+        lastPosition = currentPos;
 
-						    nextNodeId = accessibleNode.getLocationId();
-					}
-				}
-			}
+        List<Couple<Location, List<Couple<Observation, String>>>> lobs =
+            ((AbstractDedaleAgent) this.myAgent).observe();
 
-			boolean naturalEnd = !this.myMap.hasOpenNode();
+        Set<String> occupiedNodes = new HashSet<>();
+        for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
+            for (Couple<Observation, String> attr : obs.getRight()) {
+                if (attr.getLeft() == Observation.AGENTNAME) {
+                    occupiedNodes.add(obs.getLeft().getLocationId());
+                }
+            }
+        }
 
-			if (naturalEnd) {
-			    finished = true;
-			    ((ExploreCoopAgent) this.myAgent).huntStarted = true;
-			    ((ExploreCoopAgent) this.myAgent).explorationDone = true;
-			    String center = computeCentralNode(this.myMap);
-			    ((ExploreCoopAgent) this.myAgent).meetingPoint = center;
-			    System.out.println("[" + myAgent.getLocalName()
-			        + "] Fin exploration ("
-			        + ") | RDV en " + center
-			        + " | noeuds total : " + this.myMap.getSerializableGraph().getAllNodes().size());
-			    return;
-			}else {
-				//4) select next move.
-				//4.1 If there exist one open node directly reachable, go for it,
-				//	 otherwise choose one from the openNode list, compute the shortestPath and go for it
-				if (nextNodeId == null) {
-				    List<String> path = this.myMap.getShortestPathToClosestOpenNode(myPosition.getLocationId());
+        try {
+            this.myAgent.doWait(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-				    if (path != null && !path.isEmpty()) {
+        this.myMap.addNode(currentPos, MapAttribute.closed);
+        this.closedNodes.add(currentPos);  
 
-				    	String nextStep = path.get(0); 
+        String immediateNextNode = null;
+        Iterator<Couple<Location, List<Couple<Observation, String>>>> iter = lobs.iterator();
+        while (iter.hasNext()) {
+            Location accessibleNode = iter.next().getLeft();
+            boolean isNewNode = this.myMap.addNewNode(accessibleNode.getLocationId());
+            if (myPosition.getLocationId() != accessibleNode.getLocationId()) {
+                this.myMap.addEdge(myPosition.getLocationId(), accessibleNode.getLocationId());
+                if (immediateNextNode == null && isNewNode && !occupiedNodes.contains(accessibleNode.getLocationId())) {
+                    immediateNextNode = accessibleNode.getLocationId();
+                }
+            }
+        }
 
-				        if (!occupiedNodes.contains(nextStep)) {
-				            nextNodeId = nextStep;
-				        }
-				    }
+        boolean naturalEnd = !this.myMap.hasOpenNode();
+        if (naturalEnd) {
+            finished = true;
+            ((ExploreCoopAgent) this.myAgent).huntStarted = true;
+            ((ExploreCoopAgent) this.myAgent).explorationDone = true;
+            String center = computeCentralNode();
+            ((ExploreCoopAgent) this.myAgent).meetingPoint = center;
+            System.out.println("[" + myAgent.getLocalName()
+                + "] Fin exploration | RDV en " + center
+                + " | total noeuds : " + this.myMap.getSerializableGraph().getAllNodes().size());
+            return;
+        }
 
-				    if (nextNodeId == null) {
-				        System.out.println("[" + myAgent.getLocalName() + "] fallback voisins");
+        List<String> openNodes = myMap.getOpenNodes();
+        String nextNodeId = null;
 
-				        for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
-				            String neighbor = obs.getLeft().getLocationId();
+        if (immediateNextNode != null) {
+            nextNodeId = immediateNextNode;
+            currentTarget = null;
+            blockedCounter = 0;
+            lastKnownDistance = Integer.MAX_VALUE;
+        } else {
+            if (currentTarget == null || !openNodes.contains(currentTarget)) {
+                currentTarget = selectClosestOpenNode(currentPos, openNodes);
+                blockedCounter = 0;
+                lastKnownDistance = Integer.MAX_VALUE;
+            }
 
-				            // éviter de rester sur place + éviter agents
-				            if (!neighbor.equals(myPosition.getLocationId()) 
-				                && !occupiedNodes.contains(neighbor)) {
+            if (currentTarget != null) {
+                List<String> pathToTarget = myMap.getShortestPath(currentPos, currentTarget);
+                int currentDistance = (pathToTarget != null) ? pathToTarget.size() : Integer.MAX_VALUE;
 
-				                nextNodeId = neighbor;
-				                break;
-				            }
-				        }
-				    }
-				}
-				
-				//5) At each time step, the agent check if he received a graph from a teammate. 	
-				// If it was written properly, this sharing action should be in a dedicated behaviour set.
-				MessageTemplate msgTemplate=MessageTemplate.and(
-						MessageTemplate.MatchProtocol("SHARE-TOPO"),
-						MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-				ACLMessage msgReceived=this.myAgent.receive(msgTemplate);
-				if (msgReceived!=null) {
-					SerializableSimpleGraph<String, MapAttribute> sgreceived=null;
-					try {
-						sgreceived = (SerializableSimpleGraph<String, MapAttribute>)msgReceived.getContentObject();
-						System.out.println("[" + myAgent.getLocalName() + "] carte reçue de "
-					            + msgReceived.getSender().getLocalName()
-					            + " | noeuds reçus : " + sgreceived.getAllNodes().size());
-					        
-					} catch (UnreadableException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					this.myMap.mergeMap(sgreceived);
-					
-					 ACLMessage ack = new ACLMessage(ACLMessage.CONFIRM);
-					 ack.setProtocol("SHARE-TOPO-ACK");
-					 ack.addReceiver(msgReceived.getSender());
-					 this.myAgent.send(ack);
-				}
-				
-				if (nextNodeId != null && !nextNodeId.equals(lastPosition)) {
-				    stuckCounter = 0;
-				}
-				
-				boolean success = ((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(nextNodeId));
+                if (currentDistance >= lastKnownDistance) {
+                    blockedCounter++;
+                } else {
+                    blockedCounter = 0;
+                }
+                lastKnownDistance = currentDistance;
 
-				if (!success) {
-				    System.out.println("[" + myAgent.getLocalName() + "] move failed → fallback random");
+                if (blockedCounter >= 3) {
+                    System.out.println("[" + myAgent.getLocalName() + "] Bloqué " + blockedCounter +
+                                       " ticks vers " + currentTarget + " → changement de cible");
+                    List<String> otherOpenNodes = new ArrayList<>(openNodes);
+                    otherOpenNodes.remove(currentTarget);
+                    if (!otherOpenNodes.isEmpty()) {
+                        currentTarget = selectClosestOpenNode(currentPos, otherOpenNodes);
+                    } else {
+                        currentTarget = null;
+                    }
+                    blockedCounter = 0;
+                    lastKnownDistance = Integer.MAX_VALUE;
+                    pathToTarget = (currentTarget != null) ? myMap.getShortestPath(currentPos, currentTarget) : null;
+                }
 
-				    for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
-				        String neighbor = obs.getLeft().getLocationId();
+                if (currentTarget != null && pathToTarget != null && !pathToTarget.isEmpty()) {
+                    nextNodeId = pathToTarget.get(0);
+                }
+            }
+        }
 
-				        if (!neighbor.equals(myPosition.getLocationId()) 
-				            && !occupiedNodes.contains(neighbor)) {
+        if (nextNodeId != null && occupiedNodes.contains(nextNodeId)) {
+            List<String> neighbors = myMap.getNeighbors(currentPos);
+            List<String> freeNeighbors = new ArrayList<>();
+            for (String nb : neighbors) {
+                if (!occupiedNodes.contains(nb) && !nb.equals(currentPos)) {
+                    freeNeighbors.add(nb);
+                }
+            }
+            if (!freeNeighbors.isEmpty()) {
+                if (currentTarget != null) {
+                    freeNeighbors.sort(Comparator.comparingInt(
+                        nb -> myMap.getShortestPath(nb, currentTarget).size()
+                    ));
+                }
+                nextNodeId = freeNeighbors.get(0);
+            } else {
+                nextNodeId = null;
+            }
+        }
+        if (nextNodeId == null) {
+            for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
+                String neighbor = obs.getLeft().getLocationId();
+                if (!neighbor.equals(currentPos) && !occupiedNodes.contains(neighbor)) {
+                    nextNodeId = neighbor;
+                    break;
+                }
+            }
+        }
 
-				            ((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(neighbor));
-				            break;
-				        }
-				    }
-				}
-			}
+        if (nextNodeId != null && !nextNodeId.equals(lastPosition)) {
+            stuckCounter = 0;
+        }
 
-		}
-	}
+        boolean success = false;
+        if (nextNodeId != null) {
+            success = ((AbstractDedaleAgent) this.myAgent).moveTo(new GsLocation(nextNodeId));
+        }
 
-	@Override
-	public boolean done() {
-		return finished;
-	}
-	
-	private String computeCentralNode(MapRepresentation map) {
-	    var allNodes = map.getSerializableGraph().getAllNodes();
-	    return allNodes.stream()
-	        .map(n -> n.getNodeId())
-	        .min(Comparator.naturalOrder())
-	        .orElse(null);
-	}
+        if (!success) {
+            for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
+                String neighbor = obs.getLeft().getLocationId();
+                if (!neighbor.equals(currentPos)) {
+                    ((AbstractDedaleAgent) this.myAgent).moveTo(new GsLocation(neighbor));
+                    break;
+                }
+            }
+        }
 
+        MessageTemplate msgTemplate = MessageTemplate.and(
+                MessageTemplate.MatchProtocol("SHARE-TOPO"),
+                MessageTemplate.MatchPerformative(ACLMessage.INFORM));
+        ACLMessage msgReceived = this.myAgent.receive(msgTemplate);
+        if (msgReceived != null) {
+            SerializableSimpleGraph<String, MapAttribute> sgreceived = null;
+            try {
+                sgreceived = (SerializableSimpleGraph<String, MapAttribute>) msgReceived.getContentObject();
+                System.out.println("[" + myAgent.getLocalName() + "] carte reçue de "
+                        + msgReceived.getSender().getLocalName()
+                        + " | noeuds reçus : " + sgreceived.getAllNodes().size());
+            } catch (UnreadableException e) {
+                e.printStackTrace();
+            }
+            this.myMap.mergeMap(sgreceived);
+           
+            ACLMessage ack = new ACLMessage(ACLMessage.CONFIRM);
+            ack.setProtocol("SHARE-TOPO-ACK");
+            ack.addReceiver(msgReceived.getSender());
+            this.myAgent.send(ack);
+        }
+    }
+    private String selectClosestOpenNode(String currentPos, List<String> openNodes) {
+        String best = null;
+        int bestDist = Integer.MAX_VALUE;
+        for (String open : openNodes) {
+            List<String> path = myMap.getShortestPath(currentPos, open);
+            if (path != null && path.size() < bestDist) {
+                bestDist = path.size();
+                best = open;
+            }
+        }
+        return best;
+    }
+
+    private String computeCentralNode() {
+        String currentPos = ((AbstractDedaleAgent) myAgent).getCurrentPosition().getLocationId();
+        List<String> accessibleClosed = new ArrayList<>();
+        for (String node : closedNodes) {
+            List<String> path = myMap.getShortestPath(currentPos, node);
+            if (path != null) {
+                accessibleClosed.add(node);
+            }
+        }
+        if (!accessibleClosed.isEmpty()) {
+            accessibleClosed.sort(Comparator.naturalOrder()); 
+            return accessibleClosed.get(0);
+        }
+        return currentPos;
+    }
+
+    @Override
+    public boolean done() {
+        return finished;
+    }
 }
