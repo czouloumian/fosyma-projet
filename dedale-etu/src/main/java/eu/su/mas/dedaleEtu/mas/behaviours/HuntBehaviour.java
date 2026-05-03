@@ -45,9 +45,13 @@ public class HuntBehaviour extends TickerBehaviour {
     private int failedMoveCount = 0;
     private String coordinatorName;
     
+    private static final int MAX_BLOCKING_TICKS = 30;
+    private int blockingTicks = 0;
+
+    
     private String lastSeenGolemNode = null;
     private int golemSightCount = 0;
-    private static final int BLOCK_THRESHOLD = 20;
+    private static final int BLOCK_THRESHOLD = 5;
     private static final int BLOCKED_GOLEM_STENCH_RADIUS = 1;
     private final Set<String> blockedGolems = new HashSet<>();
     int lostCount = 0;
@@ -77,17 +81,8 @@ public class HuntBehaviour extends TickerBehaviour {
         AbstractDedaleAgent me = (AbstractDedaleAgent) this.myAgent;
         ExploreCoopAgent coop = (ExploreCoopAgent) me;
         
-        // On attend la fin de l'exploration
         if (coop.meetingPoint == null) return;
         if (coop.myMap == null) return;
-        
-        // Affichage d'état actuel de l'agent
-        if (state == HuntState.PATROL) 
-            System.out.println("                                            " + me.getLocalName() + " EST EN PATROUILLE");
-        if (state == HuntState.HUNTING) 
-            System.out.println("                                               " + me.getLocalName() + " EST EN CHASSE");
-        if (state == HuntState.BLOCKING) 
-            System.out.println("                                           " + me.getLocalName() + " EST EN BLOQUAGE");
         
         if (state == HuntState.BLOCKING) {
             blocking(me, golemNode);
@@ -99,38 +94,72 @@ public class HuntBehaviour extends TickerBehaviour {
         Location cur = me.getCurrentPosition();
         if (cur == null) return;
         
-        boolean adjacent = coop.myMap.getNeighbors(golemNode).contains(cur.getLocationId());
-        if (golemSightCount >= BLOCK_THRESHOLD && state != HuntState.BLOCKING && adjacent) {
+        // Process messages – this may update golemNode
+        processMessages(me);
+        
+        // --- Determine if we are REALLY adjacent (topology + observation) ---
+        boolean isReallyAdjacent = false;
+        if (golemNode != null && coop.myMap != null) {
+            List<String> golemNeighbors = coop.myMap.getNeighbors(golemNode);
+            boolean topologicallyAdjacent = golemNeighbors.contains(cur.getLocationId());
+            if (topologicallyAdjacent) {
+                // Verify that the current node actually has stench OR the golem itself
+                var obs = me.observe();
+                for (var nodeObs : obs) {
+                    if (nodeObs.getLeft().getLocationId().equals(cur.getLocationId())) {
+                        for (var o : nodeObs.getRight()) {
+                            if (o.getLeft() == Observation.STENCH ||
+                                (o.getLeft() == Observation.AGENTNAME &&
+                                 o.getRight() != null &&
+                                 o.getRight().toLowerCase().contains("wumpus"))) {
+                                isReallyAdjacent = true;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                // If topologically adjacent but no stench/wumpus, the stored golemNode is stale
+                if (topologicallyAdjacent && !isReallyAdjacent) {
+                    System.out.println("[" + myName + "] Stale golemNode " + golemNode + " – resetting");
+                    golemNode = null;
+                    lastKnownStenchNode = null;
+                }
+            }
+        }
+        
+        // --- If really adjacent, stay and broadcast claim ---
+        if (isReallyAdjacent && state != HuntState.BLOCKING) {
+            System.out.println("[" + myName + "] Really adjacent to golem at " + cur.getLocationId() + " → staying");
+            myClaimedNode = cur.getLocationId();
+            broadcastClaim(me, cur.getLocationId());
+        }
+        
+        // --- Transition to BLOCKING if threshold reached and truly adjacent ---
+        if (golemSightCount >= BLOCK_THRESHOLD && state != HuntState.BLOCKING && isReallyAdjacent) {
             state = HuntState.BLOCKING;
             addBlockedGolemZone(golemNode);
             return;
         }
-        if (golemSightCount > 0) {
-            pauseExecution(Constants.stopTimeHunt);
-            return;
-        }
         
-        processMessages(me);
-        
+        // --- PATROL (skip movement if truly adjacent) ---
         if (state == HuntState.PATROL) {
-            followerPatrol(me);
+            followerPatrol(me, isReallyAdjacent);
             updateGolemPosition(me);
             return;
         }
         
-        // HUNTING
+        // --- HUNTING ---
         receiveClaims(me);
-        
         List<String> stenchNodes = findStenchNodes(me);
         
         if (stenchNodes.isEmpty()) {
             clearMyClaim(me);
-            navigateTowardGolem(me, cur);
+            if (!isReallyAdjacent) navigateTowardGolem(me, cur);
             lostCount++;
             if (lostCount > 10) {
                 state = HuntState.PATROL;
                 lostCount = 0;
-                return;
             }
             return;
         }
@@ -144,14 +173,14 @@ public class HuntBehaviour extends TickerBehaviour {
         
         if (cur.getLocationId().equals(target)) {
             System.out.println("[" + myName + "] On stench node " + target + " ✓");
-        } else {
+        } else if (!isReallyAdjacent) {
             moveToward(me, target);
         }
     }
 
     // ==================== PATROL ====================
     
-    private void followerPatrol(AbstractDedaleAgent me) {
+    private void followerPatrol(AbstractDedaleAgent me, boolean skipMove) {
         Location cur = me.getCurrentPosition();
         if (cur == null) return;
         ExploreCoopAgent coop = (ExploreCoopAgent) me;
@@ -180,7 +209,7 @@ public class HuntBehaviour extends TickerBehaviour {
         }
 
         broadcastStatus(me);
-        if (myTargetNode != null && !cur.getLocationId().equals(myTargetNode)) {
+        if (!skipMove && myTargetNode != null && !cur.getLocationId().equals(myTargetNode)) {
             boolean moved = moveToward(me, myTargetNode);
             if (!moved) {
                 failedMoveCount++;
@@ -224,6 +253,7 @@ public class HuntBehaviour extends TickerBehaviour {
                         coop.huntStarted = true;
                         broadcastGolem(me, golemNode);
                         System.out.println("[" + myName + "] Golem VU en " + golemNode);
+                        lastKnownStenchNode = detected;
                     } else if (state != HuntState.BLOCKING && state == HuntState.HUNTING && !detected.equals(golemNode)) {
                         golemNode = detected;
                         myTargetNode = null;
@@ -259,6 +289,45 @@ public class HuntBehaviour extends TickerBehaviour {
         Location cur = me.getCurrentPosition();
         if (cur == null) return;
         ExploreCoopAgent coop = (ExploreCoopAgent) me;
+        
+
+        blockingTicks++;
+        // Timeout: if golem not seen for many ticks, leave
+        if (blockingTicks > MAX_BLOCKING_TICKS) {
+            System.out.println("[" + myName + "] BLOCKING timeout → back to HUNTING");
+            state = HuntState.HUNTING;
+            blockingTicks = 0;
+            return;
+        }
+        
+        // Check if golem still present
+        boolean golemStillHere = false;
+        for (var nodeObs : me.observe()) {
+            for (var obs : nodeObs.getRight()) {
+                if (obs.getLeft() == Observation.AGENTNAME &&
+                    obs.getRight() != null &&
+                    obs.getRight().toLowerCase().contains("wumpus")) {
+                    golemStillHere = true;
+                    break;
+                }
+            }
+        }
+        
+        if (!golemStillHere) {
+            state = HuntState.HUNTING;
+            blockingTicks = 0;
+            System.out.println("[" + myName + "] Leaving BLOCKING, golem moved");
+            return;
+        }
+        
+        if (!golemStillHere) {
+            // Golem moved away → return to hunting
+            state = HuntState.HUNTING;
+            golemSightCount = 0;
+            lostCount = 0;
+            System.out.println("[" + myName + "] Leaving BLOCKING, resuming HUNTING");
+            return;
+        }
         
         var observations = me.observe();
         boolean wumpusSeenThisTick = false;
@@ -299,7 +368,7 @@ public class HuntBehaviour extends TickerBehaviour {
             }
             broadcastGolemBlocked(me);
         }
-        pauseExecution(Constants.stopTimeHunt);
+        //pauseExecution(Constants.stopTimeHunt);
     }
     
     // ==================== MESSAGES ====================
@@ -521,11 +590,20 @@ public class HuntBehaviour extends TickerBehaviour {
     }
     
     private String pickTarget(AbstractDedaleAgent me, Location cur, List<String> stenchNodes) {
+        ExploreCoopAgent coop = (ExploreCoopAgent) me;
+        // If current node has stench and is adjacent to golem, stay there
+        if (golemNode != null && coop.myMap != null) {
+            List<String> golemNeighbors = coop.myMap.getNeighbors(golemNode);
+            if (golemNeighbors.contains(cur.getLocationId()) && stenchNodes.contains(cur.getLocationId())) {
+                return cur.getLocationId(); // stay
+            }
+        }
+        
         Set<String> takenByOthers = new HashSet<>();
         for (Map.Entry<String, String> e : claims.entrySet()) {
             if (!e.getKey().equals(myName)) takenByOthers.add(e.getValue());
         }
-        ExploreCoopAgent coop = (ExploreCoopAgent) me;
+        
         MapRepresentation map = coop.myMap;
         List<String> candidates = stenchNodes.stream()
                 .filter(n -> !blockedGolems.contains(n))
@@ -621,13 +699,12 @@ public class HuntBehaviour extends TickerBehaviour {
         var observations = me.observe();
         if (observations == null) return result;
 
-        // First pass: collect all stench nodes and wumpus nodes
         Set<String> allStenchNodes = new HashSet<>();
         Set<String> wumpusNodes = new HashSet<>();
 
         for (var nodeObs : observations) {
             String nodeId = nodeObs.getLeft().getLocationId();
-            if (cur != null && nodeId.equals(cur.getLocationId())) continue;
+            // Do NOT skip current node!
             if (blockedGolems.contains(nodeId)) continue;
 
             boolean hasStench = false;
@@ -641,8 +718,7 @@ public class HuntBehaviour extends TickerBehaviour {
             if (hasStench && !hasWumpus) allStenchNodes.add(nodeId);
         }
 
-        // Second pass: keep only stench nodes that are neighbors of another stench node
-        // (these are the inner ring, closest to Golem)
+        // Inner ring logic unchanged...
         List<String> innerRing = new ArrayList<>();
         for (String nodeId : allStenchNodes) {
             List<String> neighbors = coop.myMap.getNeighbors(nodeId);
@@ -653,14 +729,15 @@ public class HuntBehaviour extends TickerBehaviour {
             }
         }
 
-        // If inner ring is empty (stench is sparse), fall back to all stench nodes
         List<String> candidates = innerRing.isEmpty() ? new ArrayList<>(allStenchNodes) : innerRing;
 
-        // Filter out agent-occupied nodes
+        // Filter out agent-occupied nodes, but keep current node even if occupied by self
         for (String nodeId : candidates) {
-            if (!agentPositions.containsValue(nodeId)) {
-                result.add(nodeId);
+            // Only skip if occupied by another agent
+            if (!nodeId.equals(cur.getLocationId()) && agentPositions.containsValue(nodeId)) {
+                continue;
             }
+            result.add(nodeId);
         }
 
         return result;
@@ -681,9 +758,9 @@ public class HuntBehaviour extends TickerBehaviour {
         var obs = me.observe();
         if (obs == null) return false;
         
-        if (agentPositions.containsValue(nextNode) && !nextNode.equals(cur.getLocationId())) {
-    	    return false;  
-    	}
+//        if (agentPositions.containsValue(nextNode) && !nextNode.equals(cur.getLocationId())) {
+//    	    return false;  
+//    	}
         
         for (var nodeObs : obs) {
             if (nodeObs.getLeft().getLocationId().equals(nextNode)) {
@@ -693,11 +770,11 @@ public class HuntBehaviour extends TickerBehaviour {
         return false;
     }
     
-    private void pauseExecution(long duration) {
-        try {
-            Thread.sleep(duration);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void pauseExecution(long duration) {
+//        try {
+//            Thread.sleep(duration);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

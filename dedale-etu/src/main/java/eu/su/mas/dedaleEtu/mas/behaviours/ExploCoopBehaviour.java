@@ -58,6 +58,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 	private int stuckCounter = 0;
 	private String lastPosition = null;
 	private String beforeLastPosition = null;
+	private int noMoveCounter = 0;
 	
 	
 
@@ -230,19 +231,23 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				
 				boolean success = ((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(nextNodeId));
 
-				if (!success) {
-				    System.out.println("[" + myAgent.getLocalName() + "] move failed → fallback random");
-
-				    for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
-				        String neighbor = obs.getLeft().getLocationId();
-
-				        if (!neighbor.equals(myPosition.getLocationId()) 
-				            && !occupiedNodes.contains(neighbor)) {
-
-				            ((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(neighbor));
-				            break;
+				if (nextNodeId == null || !success) {
+				    noMoveCounter++;
+				    if (noMoveCounter > 5) {
+				        // Force a move to ANY neighbour, even if occupied
+				        for (Couple<Location, List<Couple<Observation, String>>> obs : lobs) {
+				            String neighbor = obs.getLeft().getLocationId();
+				            if (!neighbor.equals(myPosition.getLocationId())) {
+				                boolean moved = ((AbstractDedaleAgent)this.myAgent).moveTo(new GsLocation(neighbor));
+				                if (moved) {
+				                    noMoveCounter = 0;
+				                    break;
+				                }
+				            }
 				        }
 				    }
+				} else {
+				    noMoveCounter = 0;
 				}
 			}
 
