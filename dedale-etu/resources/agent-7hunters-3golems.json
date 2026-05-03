@@ -11,7 +11,7 @@
   "detectionRadius": 0,
   "strengthExpertise": 1,
   "lockPickingExpertise":1,
-  "userParameters": ["param1"]
+  "userParameters": ["Hunt2","Hunt3","Hunt4","Hunt5","Hunt6","Hunt7"]
   },
 { 
   "agentType":"agentExplo",
@@ -25,7 +25,7 @@
   "detectionRadius": 0,
   "strengthExpertise": 1,
   "lockPickingExpertise":1,
-  "userParameters": ["param2","param3"]
+  "userParameters": ["Hunt1","Hunt3","Hunt4","Hunt5","Hunt6","Hunt7"]
   },
 { 
   "agentType":"agentExplo",
@@ -39,7 +39,7 @@
   "detectionRadius": 0,
   "strengthExpertise": 1,
   "lockPickingExpertise":1,
-  "userParameters": ["param2","param3"]
+  "userParameters": ["Hunt1","Hunt2","Hunt4","Hunt5","Hunt6","Hunt7"]
   },
   { 
   "agentType":"agentExplo",
@@ -53,7 +53,7 @@
   "detectionRadius": 0,
   "strengthExpertise": 1,
   "lockPickingExpertise":1,
-  "userParameters": ["param2","param3"]
+  "userParameters": ["Hunt1","Hunt2","Hunt3","Hunt5","Hunt6","Hunt7"]
   },
   { 
   "agentType":"agentExplo",
@@ -67,7 +67,7 @@
   "detectionRadius": 0,
   "strengthExpertise": 1,
   "lockPickingExpertise":1,
-  "userParameters": ["param2","param3"]
+  "userParameters": ["Hunt1","Hunt2","Hunt3","Hunt4","Hunt6","Hunt7"]
   },
   { 
   "agentType":"agentExplo",
@@ -81,7 +81,7 @@
   "detectionRadius": 0,
   "strengthExpertise": 1,
   "lockPickingExpertise":1,
-  "userParameters": ["param2","param3"]
+  "userParameters": ["Hunt1","Hunt2","Hunt3","Hunt4","Hunt5","Hunt7"]
   },
   { 
   "agentType":"agentExplo",
@@ -95,7 +95,7 @@
   "detectionRadius": 0,
   "strengthExpertise": 1,
   "lockPickingExpertise":1,
-  "userParameters": ["param2","param3"]
+  "userParameters": ["Hunt1","Hunt2","Hunt3","Hunt4","Hunt5","Hunt6"]
   },
   { 
   "agentType":"wumpus",
