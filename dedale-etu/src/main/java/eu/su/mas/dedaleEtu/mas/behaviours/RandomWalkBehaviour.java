@@ -28,7 +28,7 @@ public class RandomWalkBehaviour extends TickerBehaviour{
 	private static final long serialVersionUID = 9088209402507795289L;
 
 	public RandomWalkBehaviour (final AbstractDedaleAgent myagent) {
-		super(myagent, 600);
+		super(myagent, 400);
 	}
 
 	@Override

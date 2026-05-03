@@ -8,6 +8,7 @@ import eu.su.mas.dedale.mas.agent.behaviours.platformManagment.*;
 
 import eu.su.mas.dedaleEtu.mas.behaviours.ExploCoopBehaviour;
 import eu.su.mas.dedaleEtu.mas.behaviours.HuntBehaviour;
+import eu.su.mas.dedaleEtu.mas.behaviours.HuntBehaviourMono;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 
 import jade.core.behaviours.Behaviour;
@@ -39,7 +40,7 @@ import eu.su.mas.dedale.env.EntityCharacteristics;
  */
 
 
-public class ExploreCoopAgent extends AbstractDedaleAgent {
+public class ExploreCoopAgentMono extends ExploreCoopAgent {
 
 	private static final long serialVersionUID = -7969469610241668140L;
 	//private MapRepresentation myMap;
@@ -103,8 +104,9 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 
 	}
 	
+	@Override
 	protected Behaviour addHuntBehaviour(List<String> agentNames) {
-	    return new HuntBehaviour(this, agentNames);
+	    return new HuntBehaviourMono(this, agentNames);
 	}
 	
 	
