@@ -616,23 +616,53 @@ public class HuntBehaviour extends TickerBehaviour {
     
     private List<String> findStenchNodes(AbstractDedaleAgent me) {
         List<String> result = new ArrayList<>();
+        ExploreCoopAgent coop = (ExploreCoopAgent) me;
         Location cur = me.getCurrentPosition();
         var observations = me.observe();
         if (observations == null) return result;
+
+        // First pass: collect all stench nodes and wumpus nodes
+        Set<String> allStenchNodes = new HashSet<>();
+        Set<String> wumpusNodes = new HashSet<>();
+
         for (var nodeObs : observations) {
             String nodeId = nodeObs.getLeft().getLocationId();
-            if (blockedGolems.contains(nodeId)) continue;
             if (cur != null && nodeId.equals(cur.getLocationId())) continue;
+            if (blockedGolems.contains(nodeId)) continue;
+
             boolean hasStench = false;
             boolean hasWumpus = false;
             for (var obs : nodeObs.getRight()) {
                 if (obs.getLeft() == Observation.STENCH) hasStench = true;
-                if (obs.getLeft() == Observation.AGENTNAME && "Wumpus".equals(obs.getRight())) hasWumpus = true;
+                if (obs.getLeft() == Observation.AGENTNAME
+                        && "Wumpus".equals(obs.getRight())) hasWumpus = true;
             }
-            if (hasStench && !hasWumpus && !agentPositions.containsValue(nodeId)) {
+            if (hasWumpus) wumpusNodes.add(nodeId);
+            if (hasStench && !hasWumpus) allStenchNodes.add(nodeId);
+        }
+
+        // Second pass: keep only stench nodes that are neighbors of another stench node
+        // (these are the inner ring, closest to Golem)
+        List<String> innerRing = new ArrayList<>();
+        for (String nodeId : allStenchNodes) {
+            List<String> neighbors = coop.myMap.getNeighbors(nodeId);
+            boolean adjacentToAnotherStench = neighbors.stream()
+                    .anyMatch(n -> allStenchNodes.contains(n) || wumpusNodes.contains(n));
+            if (adjacentToAnotherStench) {
+                innerRing.add(nodeId);
+            }
+        }
+
+        // If inner ring is empty (stench is sparse), fall back to all stench nodes
+        List<String> candidates = innerRing.isEmpty() ? new ArrayList<>(allStenchNodes) : innerRing;
+
+        // Filter out agent-occupied nodes
+        for (String nodeId : candidates) {
+            if (!agentPositions.containsValue(nodeId)) {
                 result.add(nodeId);
             }
         }
+
         return result;
     }
     
