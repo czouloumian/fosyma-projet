@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Comparator;
+import java.util.ArrayList;
 
 import dataStructures.serializableGraph.SerializableSimpleGraph;
 import dataStructures.tuple.Couple;
@@ -170,7 +171,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				//4) select next move.
 				//4.1 If there exist one open node directly reachable, go for it,
 				//	 otherwise choose one from the openNode list, compute the shortestPath and go for it
-				if (nextNodeId == null) {
+				/*if (nextNodeId == null) {
 				    List<String> path = this.myMap.getShortestPathToClosestOpenNode(myPosition.getLocationId());
 
 				    if (path != null && !path.isEmpty()) {
@@ -196,6 +197,45 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				                break;
 				            }
 				        }
+				    }
+				}*/
+				
+				// 4) Sélectionner le prochain nœud à visiter
+				
+				List<String> openNodes = myMap.getOpenNodes();
+				if (!openNodes.isEmpty()) {
+				    // Trouver le nœud ouvert le plus proche (en nombre de pas)
+				    String closest = null;
+				    int bestDist = Integer.MAX_VALUE;
+				    for (String open : openNodes) {
+				        List<String> path = myMap.getShortestPath(myPosition.getLocationId(), open);
+				        if (path != null && path.size() < bestDist) {
+				            bestDist = path.size();
+				            closest = open;
+				        }
+				    }
+				    if (closest != null) {
+				        List<String> path = myMap.getShortestPath(myPosition.getLocationId(), closest);
+				        if (path != null && !path.isEmpty()) {
+				            nextNodeId = path.get(0);
+				        }
+				    }
+				}
+
+				// Éviter de se diriger vers un nœud occupé par un autre agent
+				if (nextNodeId != null && occupiedNodes.contains(nextNodeId)) {
+				    // Chercher un autre voisin libre qui permette d'atteindre un ouvert
+				    List<String> neighbors = myMap.getNeighbors(myPosition.getLocationId());
+				    List<String> free = new ArrayList<>();
+				    for (String nb : neighbors) {
+				        if (!occupiedNodes.contains(nb) && !nb.equals(myPosition.getLocationId())) {
+				            free.add(nb);
+				        }
+				    }
+				    if (!free.isEmpty()) {
+				        nextNodeId = free.get(0);
+				    } else {
+				        nextNodeId = null; // attendre
 				    }
 				}
 				

@@ -89,8 +89,10 @@ public final class ConfigurationFile {
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2020-topologyExam1-graph.dgs";
 
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2022-topologyExam1-draft.dgs";
-	public static String INSTANCE_TOPOLOGY="resources/topology/map2022-topologyExam-V2b.dgs";
+	//public static String INSTANCE_TOPOLOGY="resources/topology/map2022-topologyExam-V2b.dgs";
 	//public static String INSTANCE_TOPOLOGY="resources/map2019-topologyExam1";
+	//public static String INSTANCE_TOPOLOGY="resources/cartes_presentation/map2026-topologyExam1.dgs";
+	public static String INSTANCE_TOPOLOGY="resources/cartes_presentation/map2026-topologyExam2.dgs";
 
 
 	
@@ -163,13 +165,15 @@ public final class ConfigurationFile {
 	//public static String INSTANCE_CONFIGURATION_ENTITIES=null;
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo2.json";
-	public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo3.json";
+	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1explo3.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1tanker.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1human.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1tanker-1collect.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-1wumpus-1collect.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-2collect.json";
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-2explo-1human.json";
+	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-3hunters-1human.json";
+	public static String INSTANCE_CONFIGURATION_ENTITIES="resources/agent-7hunters-3golems.json";
 	
 
 

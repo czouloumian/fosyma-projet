@@ -2,6 +2,7 @@ package eu.su.mas.dedaleEtu.mas.behaviours;
 
 import eu.su.mas.dedale.env.Location;
 import eu.su.mas.dedale.env.Observation;
+import eu.su.mas.dedale.env.gs.GsLocation;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
@@ -58,6 +59,11 @@ public class HuntBehaviour extends TickerBehaviour {
     int lastTimeSeen = 0;
     private static final int RELAY_LIMIT = 5;
     
+    public static final int MAX_BLOCKED_TICKS = 5;
+    private int blockedCounter = 0;               
+    private String beforeLastPosition = null;    
+    private String lastPosition = null; 
+    
     public HuntBehaviour(ExploreCoopAgent agent, List<String> allAgentNames, String coordinatorName) {
         super(agent, Constants.stopTimeHunt);
         this.allAgentNames = allAgentNames;
@@ -69,6 +75,9 @@ public class HuntBehaviour extends TickerBehaviour {
         this.isLeader = false;
         this.coordinatorName = coordinatorName;
         lostCount = 0;
+        this.beforeLastPosition = null;
+        this.lastPosition = null;
+        this.blockedCounter = 0;
         System.out.println("[" + myName + "] HuntBehaviour initialisé (coordinator=" + coordinatorName + ")");
     }
 
@@ -84,6 +93,13 @@ public class HuntBehaviour extends TickerBehaviour {
         if (coop.meetingPoint == null) return;
         if (coop.myMap == null) return;
         
+        // Mémoriser la position précédente pour les reculs
+        Location curBefore = me.getCurrentPosition();
+        if (curBefore != null) {
+            this.beforeLastPosition = this.lastPosition;
+            this.lastPosition = curBefore.getLocationId();
+        }
+        
         if (state == HuntState.BLOCKING) {
             blocking(me, golemNode);
             return;
@@ -94,16 +110,14 @@ public class HuntBehaviour extends TickerBehaviour {
         Location cur = me.getCurrentPosition();
         if (cur == null) return;
         
-        // Process messages – this may update golemNode
         processMessages(me);
         
-        // --- Determine if we are REALLY adjacent (topology + observation) ---
+        // --- Déterminer si on est vraiment adjacent au golem ---
         boolean isReallyAdjacent = false;
         if (golemNode != null && coop.myMap != null) {
             List<String> golemNeighbors = coop.myMap.getNeighbors(golemNode);
             boolean topologicallyAdjacent = golemNeighbors.contains(cur.getLocationId());
             if (topologicallyAdjacent) {
-                // Verify that the current node actually has stench OR the golem itself
                 var obs = me.observe();
                 for (var nodeObs : obs) {
                     if (nodeObs.getLeft().getLocationId().equals(cur.getLocationId())) {
@@ -119,65 +133,75 @@ public class HuntBehaviour extends TickerBehaviour {
                         break;
                     }
                 }
-                // If topologically adjacent but no stench/wumpus, the stored golemNode is stale
                 if (topologicallyAdjacent && !isReallyAdjacent) {
-                    System.out.println("[" + myName + "] Stale golemNode " + golemNode + " – resetting");
+                    // stale golemNode, on le reset
                     golemNode = null;
                     lastKnownStenchNode = null;
                 }
             }
         }
         
-        // --- If really adjacent, stay and broadcast claim ---
+        // --- Si vraiment adjacent, rester et broadcast claim ---
         if (isReallyAdjacent && state != HuntState.BLOCKING) {
             System.out.println("[" + myName + "] Really adjacent to golem at " + cur.getLocationId() + " → staying");
             myClaimedNode = cur.getLocationId();
             broadcastClaim(me, cur.getLocationId());
+            blockedCounter = 0;
+            return;
         }
         
-        // --- Transition to BLOCKING if threshold reached and truly adjacent ---
+        // --- Transition vers BLOCKING si seuil atteint ---
         if (golemSightCount >= BLOCK_THRESHOLD && state != HuntState.BLOCKING && isReallyAdjacent) {
             state = HuntState.BLOCKING;
             addBlockedGolemZone(golemNode);
             return;
         }
         
-        // --- PATROL (skip movement if truly adjacent) ---
+        // --- PATROL ---
         if (state == HuntState.PATROL) {
             followerPatrol(me, isReallyAdjacent);
             updateGolemPosition(me);
             return;
         }
         
-        // --- HUNTING ---
-        receiveClaims(me);
-        List<String> stenchNodes = findStenchNodes(me);
-        
-        if (stenchNodes.isEmpty()) {
-            clearMyClaim(me);
-            if (!isReallyAdjacent) navigateTowardGolem(me, cur);
-            lostCount++;
-            if (lostCount > 10) {
-                state = HuntState.PATROL;
-                lostCount = 0;
+        // --- HUNTING : priorité au ciblage direct des voisins du golem ---
+        if (state == HuntState.HUNTING) {
+            receiveClaims(me);
+            
+            // NOUVEAU : si on connaît la position exacte du golem, on va vers ses voisins
+            if (golemNode != null && coop.myMap != null && !blockedGolems.contains(golemNode)) {
+                moveToAdjacentGolem(me, cur);
+                return;
             }
-            return;
-        }
-        
-        lastKnownStenchNode = stenchNodes.get(0);
-        String target = pickTarget(me, cur, stenchNodes);
-        if (target == null) target = stenchNodes.get(0);
-        
-        myClaimedNode = target;
-        broadcastClaim(me, target);
-        
-        if (cur.getLocationId().equals(target)) {
-            System.out.println("[" + myName + "] On stench node " + target + " ✓");
-        } else if (!isReallyAdjacent) {
-            moveToward(me, target);
+            
+            // Sinon, on utilise la logique basée sur les stench (golem pas encore vu)
+            List<String> stenchNodes = findStenchNodes(me);
+            if (stenchNodes.isEmpty()) {
+                clearMyClaim(me);
+                if (!isReallyAdjacent) navigateTowardGolem(me, cur);
+                lostCount++;
+                if (lostCount > 10) {
+                    state = HuntState.PATROL;
+                    lostCount = 0;
+                }
+                return;
+            }
+            
+            lastKnownStenchNode = stenchNodes.get(0);
+            String target = pickTarget(me, cur, stenchNodes);
+            if (target == null) target = stenchNodes.get(0);
+            
+            myClaimedNode = target;
+            broadcastClaim(me, target);
+            
+            if (cur.getLocationId().equals(target)) {
+                System.out.println("[" + myName + "] On stench node " + target + " ✓");
+            } else if (!isReallyAdjacent) {
+                moveToward(me, target);
+            }
         }
     }
-
+    
     // ==================== PATROL ====================
     
     private void followerPatrol(AbstractDedaleAgent me, boolean skipMove) {
@@ -746,21 +770,27 @@ public class HuntBehaviour extends TickerBehaviour {
     private boolean moveToward(AbstractDedaleAgent me, String targetId) {
         Location cur = me.getCurrentPosition();
         if (cur == null || cur.getLocationId().equals(targetId)) return false;
+        
         ExploreCoopAgent coop = (ExploreCoopAgent) me;
         MapRepresentation map = coop.myMap;
         if (map == null) return false;
+        
         boolean targetExists = map.getSerializableGraph().getAllNodes().stream()
                 .anyMatch(n -> n.getNodeId().equals(targetId));
         if (!targetExists) return false;
+        
         List<String> path = map.getShortestPath(cur.getLocationId(), targetId);
         if (path == null || path.isEmpty()) return false;
         String nextNode = path.get(0);
+        
         var obs = me.observe();
         if (obs == null) return false;
         
-//        if (agentPositions.containsValue(nextNode) && !nextNode.equals(cur.getLocationId())) {
-//    	    return false;  
-//    	}
+        // Vérifier si le prochain nœud est occupé par un autre agent
+        if (agentPositions.containsValue(nextNode) && !nextNode.equals(cur.getLocationId())) {
+            // Gérer le conflit
+            return handleBlockedNode(me, cur, nextNode, targetId);
+        }
         
         for (var nodeObs : obs) {
             if (nodeObs.getLeft().getLocationId().equals(nextNode)) {
@@ -768,6 +798,144 @@ public class HuntBehaviour extends TickerBehaviour {
             }
         }
         return false;
+    }
+    
+    /**
+     * Se déplace vers un nœud adjacent au golem (pas vers le golem lui-même).
+     * Évite les nœuds déjà réclamés par d'autres agents.
+     */
+    private void moveToAdjacentGolem(AbstractDedaleAgent me, Location cur) {
+        ExploreCoopAgent coop = (ExploreCoopAgent) me;
+        MapRepresentation map = coop.myMap;
+        if (map == null || golemNode == null) return;
+        
+        List<String> golemNeighbors = map.getNeighbors(golemNode);
+        if (golemNeighbors.isEmpty()) return;
+        
+        // Si déjà sur un voisin, on reste et on broadcast
+        if (golemNeighbors.contains(cur.getLocationId())) {
+            myClaimedNode = cur.getLocationId();
+            broadcastClaim(me, myClaimedNode);
+            blockedCounter = 0;
+            return;
+        }
+        
+        // Compter les claims par nœud
+        Map<String, Integer> claimCount = new HashMap<>();
+        for (String n : golemNeighbors) claimCount.put(n, 0);
+        for (String agent : claims.keySet()) {
+            String claimed = claims.get(agent);
+            if (claimed != null && claimCount.containsKey(claimed)) {
+                claimCount.put(claimed, claimCount.get(claimed) + 1);
+            }
+        }
+        // Éviter les nœuds bloqués
+        Set<String> blocked = new HashSet<>(blockedGolems);
+        
+        // Choisir le voisin avec le moins de claims (et non bloqué)
+        String bestTarget = null;
+        int bestScore = Integer.MAX_VALUE;
+        for (String neighbor : golemNeighbors) {
+            if (blocked.contains(neighbor)) continue;
+            int score = claimCount.getOrDefault(neighbor, 0);
+            // Pénaliser les nœuds éloignés (distance)
+            List<String> path = map.getShortestPath(cur.getLocationId(), neighbor);
+            int dist = (path == null) ? Integer.MAX_VALUE : path.size();
+            score += dist;  // priorité aux plus proches
+            if (score < bestScore) {
+                bestScore = score;
+                bestTarget = neighbor;
+            }
+        }
+        
+        if (bestTarget == null) {
+            // Fallback : prendre le voisin le plus proche même bloqué
+            bestTarget = golemNeighbors.stream()
+                .min(Comparator.comparingInt(n -> {
+                    List<String> p = map.getShortestPath(cur.getLocationId(), n);
+                    return p == null ? Integer.MAX_VALUE : p.size();
+                }))
+                .orElse(null);
+        }
+        
+        if (bestTarget == null) return;
+        
+        myClaimedNode = bestTarget;
+        broadcastClaim(me, bestTarget);
+        if (!cur.getLocationId().equals(bestTarget)) {
+            boolean success = moveToward(me, bestTarget);
+            if (!success) {
+                blockedCounter++;
+                if (blockedCounter >= MAX_BLOCKED_TICKS) {
+                    myClaimedNode = null;
+                    blockedCounter = 0;
+                }
+            } else {
+                blockedCounter = 0;
+            }
+        }
+    }
+    
+    /**
+     * Gère le cas où le prochain nœud est occupé par un autre agent.
+     * Règle : celui qui est le plus proche du golem (ou de la cible) a la priorité.
+     * L'autre agent doit reculer ou attendre.
+     */
+    private boolean handleBlockedNode(AbstractDedaleAgent me, Location cur, String blockedNode, String targetId) {
+        // Trouver l'agent qui bloque
+        String blockingAgent = null;
+        for (Map.Entry<String, String> e : agentPositions.entrySet()) {
+            if (e.getValue().equals(blockedNode)) {
+                blockingAgent = e.getKey();
+                break;
+            }
+        }
+        if (blockingAgent == null) return false;
+        
+        ExploreCoopAgent coop = (ExploreCoopAgent) me;
+        MapRepresentation map = coop.myMap;
+        if (map == null) return false;
+        
+        // Critère : distance au golem (si connu)
+        int myDist = Integer.MAX_VALUE;
+        int otherDist = Integer.MAX_VALUE;
+        if (golemNode != null) {
+            List<String> myPath = map.getShortestPath(cur.getLocationId(), golemNode);
+            List<String> otherPath = map.getShortestPath(blockedNode, golemNode);
+            if (myPath != null) myDist = myPath.size();
+            if (otherPath != null) otherDist = otherPath.size();
+        } else {
+            // Si golem inconnu, on utilise la distance à la cible finale
+            List<String> myPath = map.getShortestPath(cur.getLocationId(), targetId);
+            List<String> otherPath = map.getShortestPath(blockedNode, targetId);
+            if (myPath != null) myDist = myPath.size();
+            if (otherPath != null) otherDist = otherPath.size();
+        }
+        
+        // Si l'autre agent est plus proche de l'objectif, on lui cède le passage
+        if (otherDist < myDist) {
+            // Je dois reculer : chercher un autre voisin (si possible la position précédente)
+            List<String> myNeighbors = map.getNeighbors(cur.getLocationId());
+            myNeighbors.remove(blockedNode);  // enlever la direction bloquée
+            
+            // Essayer de revenir sur la case précédente (si elle est libre)
+            if (beforeLastPosition != null && myNeighbors.contains(beforeLastPosition) &&
+                !agentPositions.containsValue(beforeLastPosition)) {
+                GsLocation prevLoc = new GsLocation(beforeLastPosition);
+                return ((AbstractDedaleAgent) me).moveTo(prevLoc);
+            }
+            // Sinon, prendre le premier voisin libre
+            for (String neighbor : myNeighbors) {
+                if (!agentPositions.containsValue(neighbor)) {
+                    return ((AbstractDedaleAgent) me).moveTo(new GsLocation(neighbor));
+                }
+            }
+            // Aucun mouvement possible, on attend
+            return false;
+        } else {
+            // Je suis plus proche (ou égal) : j'attends que l'autre se déplace
+            return false;
+        }
     }
     
 //    private void pauseExecution(long duration) {
